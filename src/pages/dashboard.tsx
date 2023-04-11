@@ -66,7 +66,8 @@ const DashboardPage: React.FC = () => {
       selectedTone
     );
     const options = {
-      prompt: prompt,
+      message: prompt,
+      context: "Tweet Generator",
       maxTokens: 50,
       n: 1,
       temperature: 0.7,
@@ -74,8 +75,8 @@ const DashboardPage: React.FC = () => {
 
     try {
       const response = await generateContent(options);
-      if (response.choices.length > 0) {
-        const generatedText = response.choices[0].text;
+      if (response && response.length > 0) {
+        const generatedText = response;
         console.log("Generated text: ", generatedText);
         // Display the generated text or handle it as needed
       } else {

@@ -1,4 +1,9 @@
-import { Configuration, OpenAIApi, CreateCompletionResponse } from "openai";
+import {
+  Configuration,
+  OpenAIApi,
+  CreateCompletionResponse,
+  ChatCompletionResponseMessage,
+} from "openai";
 
 const config = new Configuration({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
@@ -6,14 +11,10 @@ const config = new Configuration({
 const openai = new OpenAIApi(config);
 
 export interface GenerateContentOptions {
-  prompt: string;
+  message: string;
+  context: string;
   maxTokens?: number;
-  n?: number;
-  stop?: string | string[];
   temperature?: number;
-  topP?: number;
-  frequencyPenalty?: number;
-  presencePenalty?: number;
 }
 
 export interface GeneratedContent {
@@ -36,13 +37,20 @@ export interface GeneratedContent {
 
 export const generateContent = async (
   options: GenerateContentOptions
-): Promise<CreateCompletionResponse> => {
-  console.log("Prompt:", options.prompt);
+): Promise<string | undefined> => {
+  console.log("Message:", options.message);
+  console.log("Context:", options.context);
   console.log("Options:", options);
 
-  const response = await openai.createCompletion({
-    ...options,
-    model: "text-davinci-003",
+  const response = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    messages: [
+      { role: "system", content: options.context },
+      { role: "user", content: options.message },
+    ],
+    temperature: options.temperature,
+    max_tokens: options.maxTokens,
   });
-  return response.data;
+
+  return response.data.choices[0].message?.content;
 };
