@@ -7,7 +7,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <UserProfileProvider>
-        <div data-theme="dark">
+        <div data-theme="light">
           <Component {...pageProps} />
         </div>
       </UserProfileProvider>

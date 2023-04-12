@@ -8,13 +8,15 @@ const UserCard: React.FC = () => {
   const { userProfile } = useUserProfile(user?.uid);
 
   return (
-    <div className="card glass bg-base-300 w-full md:w-auto">
+    <div className="card bg-base-300 w-[100%] shadow-xl">
       <div className="card-body">
-        <h2 className="card-title">Profile Info</h2>
-        <p>Welcome, {user?.email}!</p>
+        <h1 className="card-title">Welcome back - {user?.email}</h1>
+        <h2 className="text-lg font-bold underline">Profile Info</h2>
         <p>User Type: {userProfile?.userType}</p>
         <p>Business Name: {userProfile?.businessName}</p>
         <p>Business Description: {userProfile?.businessDescription}</p>
+        <p>Target Audience: {userProfile?.targetAudience}</p>
+        <p>Platforms: {userProfile?.platforms.join(", ")}</p>
       </div>
     </div>
   );

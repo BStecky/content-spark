@@ -3,11 +3,11 @@ import PrivateRoute from "@/components/auth/PrivateRoute";
 import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/router";
-import { getUserProfile } from "@/utils/firebase";
 import { useUserProfile } from "@/hooks/userProfileContext";
 import { generateContent } from "../api/openai";
 import { UserProfile } from "firebase/auth";
 import UserCard from "@/components/UserCard";
+import { saveGeneratedContent } from "@/utils/contentUtils";
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -17,11 +17,82 @@ const DashboardPage: React.FC = () => {
   const hasProfile = userProfile !== null;
 
   const [selectedTone, setSelectedTone] = useState("Professional");
+  const [selectedPlatform, setSelectedPlatform] = useState("Twitter");
+  const [threadLength, setThreadLength] = useState(2);
   const [contentType, setContentType] = useState("");
   const [replyTo, setReplyTo] = useState("");
   const [about, setAbout] = useState("");
 
-  // ...
+  type PlatformContentOptions = {
+    [key: string]: string[];
+  };
+
+  const platformContentOptions: PlatformContentOptions = {
+    Twitter: ["Tweet", "Reply", "Thread"],
+    LinkedIn: ["Post", "Reply"],
+    // Add new platforms and their content options here
+  };
+
+  type PlatformContentSelectedOptions = {
+    [key: string]: {
+      inputs: Array<{
+        id: string;
+        label: string;
+        placeholder: string;
+        stateUpdater: (value: any) => void;
+      }>;
+    };
+  };
+
+  const platformContentSelectedOptions: PlatformContentSelectedOptions = {
+    Tweet: {
+      inputs: [
+        {
+          id: "about",
+          label: "About",
+          placeholder: "Enter what the content should be about",
+          stateUpdater: setAbout,
+        },
+      ],
+    },
+    Post: {
+      inputs: [
+        {
+          id: "about",
+          label: "About",
+          placeholder: "Enter what the post should be about",
+          stateUpdater: setAbout,
+        },
+      ],
+    },
+    Thread: {
+      inputs: [
+        {
+          id: "about",
+          label: "About",
+          placeholder: "Enter what the thread should be about",
+          stateUpdater: setAbout,
+        },
+      ],
+    },
+    Reply: {
+      inputs: [
+        {
+          id: "reply-to",
+          label: "Reply To",
+          placeholder: "Enter the post to reply to",
+          stateUpdater: setReplyTo,
+        },
+        {
+          id: "about",
+          label: "About",
+          placeholder: "Enter what the reply should be about",
+          stateUpdater: setAbout,
+        },
+      ],
+    },
+    // Add more content types and their input configurations here
+  };
 
   function createPrompt(
     userProfile: UserProfile,
@@ -78,6 +149,15 @@ const DashboardPage: React.FC = () => {
       if (response && response.length > 0) {
         const generatedText = response;
         console.log("Generated text: ", generatedText);
+        console.log("Platform: ", selectedPlatform);
+        console.log("Content type: ", contentType);
+        const contentCategory = selectedPlatform
+          .toLowerCase()
+          .concat(contentType);
+        console.log("Content category: ", contentCategory);
+        if (user) {
+          saveGeneratedContent(user.uid, generatedText, contentCategory);
+        }
         // Display the generated text or handle it as needed
       } else {
         console.log("No content was generated.");
@@ -93,106 +173,191 @@ const DashboardPage: React.FC = () => {
     }
   }, [loadingProfile, hasProfile, router]);
 
+  const renderContentTypeOptions = (platform: string) => {
+    return platformContentOptions[platform]?.map((contentOption: string) => (
+      <div
+        key={contentOption}
+        className="form-control hover:outline outline-2 outline-primary m-1 rounded-md ease-in-out-[0.2s]"
+      >
+        <div className="">
+          <label className="label cursor-pointer">
+            <span className="label-text px-2">
+              {contentOption.charAt(0).toUpperCase() + contentOption.slice(1)}
+            </span>
+            <input
+              type="radio"
+              name="radio-content-type"
+              className="radio checked:bg-primary"
+              value={contentOption}
+              onChange={(e) => setContentType(e.target.value)}
+              checked={contentType === contentOption}
+            />
+          </label>
+        </div>
+      </div>
+    ));
+  };
+
   return (
     <PrivateRoute>
-      <div className="h-screen">
+      <div className="h-full">
         <Navbar />
         <div className="container mx-auto px-4">
           <h1 className="text-3xl text-primary font-bold text-center pt-10">
             Dashboard
           </h1>
           {user ? (
-            <main>
-              <section className="flex flex-col md:flex-row gap-4 justify-center items-start mt-10 text-accent">
+            <main className="flex flex-col lg:flex-row  justify-center w-full">
+              <section className="mx-auto w-[100%] p-4">
                 <UserCard />
-                <div className="card glass bg-base-300 w-full md:w-auto">
-                  <div className="card-body">
-                    <h2 className="card-title">Target & Platforms</h2>
-                    <p>Target Audience: {userProfile?.targetAudience}</p>
-                    <p>Platforms: {userProfile?.platforms.join(", ")}</p>
-                  </div>
-                </div>
               </section>
-              <section className="max-w-lg bg-base-300 mx-auto p-10 rounded-lg mt-10">
-                <h2 className="text-2xl font-bold text-center">
-                  Generate Content
-                </h2>
-                <div className="">
-                  <form
-                    onSubmit={handleSubmit}
-                    className="w-full max-w-sm mx-auto"
-                  >
-                    <div className="flex flex-col p-4">
+              <section className="mx-auto w-[100%] p-4">
+                <div className="w-[100%] card bg-base-300 mx-auto p-10 rounded-lg shadow-xl">
+                  <div className="card-body">
+                    <h2 className="text-2xl card-title font-bold text-center">
+                      Generate Content
+                    </h2>
+                    <form
+                      onSubmit={handleSubmit}
+                      className="w-full max-w-sm mx-auto"
+                    >
+                      <label htmlFor="platform" className="text-md">
+                        Platform:
+                      </label>
+                      <div className="flex flex-wrap justify-evenly p-4 max-w-md">
+                        {["Twitter", "LinkedIn"].map((platform) => (
+                          <div key={platform} className="form-control">
+                            <label className="label cursor-pointer">
+                              <span className="label-text px-2">
+                                {platform}
+                              </span>
+                              <input
+                                type="radio"
+                                name="radio-10"
+                                className={`radio checked:bg-primary `}
+                                value={platform}
+                                onChange={(e) =>
+                                  setSelectedPlatform(e.target.value)
+                                }
+                                checked={selectedPlatform === platform}
+                              />
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+
                       <label htmlFor="tone" className="text-md">
                         Choose a tone:
                       </label>
-                      <select
-                        name="tone"
-                        id="tone"
-                        className="select select-bordered w-max"
-                        value={selectedTone}
-                        onChange={(e) => setSelectedTone(e.target.value)}
-                      >
-                        <option value="Professional">Professional</option>
-                        <option value="Friendly">Friendly</option>
-                        <option value="Casual">Casual</option>
-                        <option value="Humorous">Humorous</option>
-                        <option value="Inspirational">Inspirational</option>
-                        {/* Add more options for other tones */}
-                      </select>
-                    </div>
-                    <div className="flex flex-col p-4">
+                      <div className="grid grid-cols-2 justify-evenly p-4 max-w-md">
+                        {[
+                          "Professional",
+                          "Friendly",
+                          "Casual",
+                          "Humorous",
+                          "Inspirational",
+                        ].map((tone) => (
+                          <div
+                            key={tone}
+                            className="form-control hover:outline outline-2 outline-primary m-1 rounded-md ease-in-out-[0.2s]"
+                          >
+                            <label className="label cursor-pointer">
+                              <span className="label-text px-2">{tone}</span>
+                              <input
+                                type="radio"
+                                name="radio-tone"
+                                className={`radio checked:bg-primary`}
+                                value={tone}
+                                onChange={(e) =>
+                                  setSelectedTone(e.target.value)
+                                }
+                                checked={selectedTone === tone}
+                              />
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+
                       <label htmlFor="content-type" className="text-md">
-                        Content Type
+                        Content Type:
                       </label>
-                      <select
-                        id="content-type"
-                        value={contentType}
-                        className="select select-bordered w-max"
-                        onChange={(e) => setContentType(e.target.value)}
+                      <div className="grid grid-cols-2 p-4 max-w-md">
+                        {renderContentTypeOptions(selectedPlatform)}
+                      </div>
+
+                      {contentType === "thread" && (
+                        <div className="w-full flex flex-col items-center">
+                          <label htmlFor="thread-length" className="text-md">
+                            Thread Length:
+                          </label>
+                          <div className="flex items-center">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (threadLength > 2) {
+                                  setThreadLength(threadLength - 1);
+                                }
+                              }}
+                              className="btn btn-primary"
+                            >
+                              -
+                            </button>
+                            <input
+                              type=""
+                              id="thread-length"
+                              value={threadLength}
+                              className="input input-bordered w-20 mx-2 text-center"
+                              min="2"
+                              max="10"
+                              onChange={(e) => {
+                                const value = parseInt(e.target.value);
+                                if (value >= 2 && value <= 10) {
+                                  setThreadLength(value);
+                                }
+                              }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (threadLength < 10) {
+                                  setThreadLength(threadLength + 1);
+                                }
+                              }}
+                              className="btn btn-primary"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {platformContentSelectedOptions[contentType]?.inputs.map(
+                        (input) => (
+                          <div key={input.id} className="flex flex-col p-4">
+                            <label htmlFor={input.id} className="text-md">
+                              {input.label}
+                            </label>
+                            <textarea
+                              id={input.id}
+                              className="textarea textarea-bordered w-full"
+                              onChange={(e) =>
+                                input.stateUpdater(e.target.value)
+                              }
+                              placeholder={input.placeholder}
+                            />
+                          </div>
+                        )
+                      )}
+
+                      <button
+                        type="submit"
+                        onClick={handleSubmit}
+                        className="btn btn-primary m-4"
                       >
-                        <option value="">Select content type</option>
-                        <option value="tweet">Tweet</option>
-                        <option value="reply">Reply</option>
-                        <option value="thread">Thread</option>
-                      </select>
-                    </div>
-                    {contentType === "reply" && (
-                      <div className="flex flex-col p-4">
-                        <label htmlFor="reply-to" className="text-md">
-                          Reply To
-                        </label>
-                        <textarea
-                          id="reply-to"
-                          value={replyTo}
-                          className="textarea textarea-bordered w-full"
-                          onChange={(e) => setReplyTo(e.target.value)}
-                          placeholder="Enter the tweet to reply to"
-                        />
-                      </div>
-                    )}
-                    {contentType === "tweet" || contentType === "thread" ? (
-                      <div className="flex flex-col p-4">
-                        <label htmlFor="about" className="text-md">
-                          About
-                        </label>
-                        <textarea
-                          id="about"
-                          value={about}
-                          className="textarea textarea-bordered w-full"
-                          onChange={(e) => setAbout(e.target.value)}
-                          placeholder="Enter what the content should be about"
-                        />
-                      </div>
-                    ) : null}
-                    <button
-                      type="submit"
-                      onClick={handleSubmit}
-                      className="btn btn-primary m-4"
-                    >
-                      Generate
-                    </button>
-                  </form>
+                        Generate
+                      </button>
+                    </form>
+                  </div>
                 </div>
               </section>
             </main>
