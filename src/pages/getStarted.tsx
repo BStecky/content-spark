@@ -67,192 +67,197 @@ const GetStarted: React.FC = () => {
   };
 
   return (
-    <PrivateRoute>
-      <Navbar></Navbar>
-      <section className="max-w-lg bg-base-300 mx-auto p-10 rounded-lg mt-10">
-        <h2 className="text-center text-2xl font-bold mb-4">Get Started</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        <form onSubmit={handleSubmit} className="w-full max-w-sm mx-auto">
-          <div className="mb-4">
-            <label className="block font-bold mb-2" htmlFor="userType">
-              Are you a small business owner, content creator, or both?
-            </label>
-            <select
-              className="input input-bordered input-primary w-full max-w-s"
-              id="userType"
-              value={userType}
-              onChange={(e) => setUserType(e.target.value)}
-            >
-              <option value="">Select an option</option>
-              <option value="smallBusiness">Small Business Owner</option>
-              <option value="contentCreator">Content Creator</option>
-              <option value="both">Both</option>
-            </select>
-          </div>
-          {/* Add more questions as needed */}
-          <div className="mb-4">
-            <label className="block font-bold mb-2" htmlFor="businessName">
-              What is your business name or content creator name?
-            </label>
-            <input
-              className="input input-bordered input-primary w-full max-w-s"
-              id="businessName"
-              type="text"
-              value={businessName}
-              onChange={(e) => setBusinessName(e.target.value)}
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block font-bold mb-2"
-              htmlFor="businessDescription"
-            >
-              Please provide a brief description of your business or content.
-            </label>
-            <div className="pb-2">
-              <p className="opacity-50 underline">Examples</p>
-              <ul className="opacity-50 list-disc ml-10 text-s">
-                <li>Competitive League of Legends streamer</li>
-                <li>Local gardening and lawncare</li>
-                <li>
-                  Handmade crafts and collectibles seller and content creator
-                </li>
-              </ul>
+    <main className="min-h-screen lg:min-h-screen">
+      <PrivateRoute>
+        <Navbar></Navbar>
+        <section className="max-w-lg bg-base-300 mx-auto p-10 rounded-lg mt-10">
+          <h2 className="text-center text-2xl font-bold mb-4">Get Started</h2>
+          {error && <p className="text-red-500 mb-4">{error}</p>}
+          <form onSubmit={handleSubmit} className="w-full max-w-sm mx-auto">
+            <div className="mb-4">
+              <label className="block font-bold mb-2" htmlFor="userType">
+                Are you a small business owner, content creator, or both?
+              </label>
+              <select
+                className="input input-bordered input-primary w-full max-w-s"
+                id="userType"
+                value={userType}
+                onChange={(e) => setUserType(e.target.value)}
+              >
+                <option value="">Select an option</option>
+                <option value="Small Business Owner">
+                  Small Business Owner
+                </option>
+                <option value="Content Creator">Content Creator</option>
+                <option value="Small Business Owner and Content Creator">
+                  Both
+                </option>
+              </select>
             </div>
-            <input
-              className="input input-bordered input-primary w-full max-w-s"
-              id="businessDescription"
-              type="text"
-              value={businessDescription}
-              onChange={(e) => setBusinessDescription(e.target.value)}
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block font-bold mb-2" htmlFor="targetAudience">
-              What is your target audience or ideal customer?
-            </label>
-            <div className="pb-2">
-              <p className="opacity-50 underline">Examples</p>
-              <ul className="opacity-50 list-disc ml-10">
-                <li>All ages</li>
-                <li>Young men and women ages 18 - 25</li>
-                <li>Teenagers and young adults</li>
-              </ul>
+            {/* Add more questions as needed */}
+            <div className="mb-4">
+              <label className="block font-bold mb-2" htmlFor="businessName">
+                What is your business name or content creator name?
+              </label>
+              <input
+                className="input input-bordered input-primary w-full max-w-s"
+                id="businessName"
+                type="text"
+                value={businessName}
+                onChange={(e) => setBusinessName(e.target.value)}
+              />
             </div>
-            <input
-              className="input input-bordered input-primary w-full max-w-s"
-              id="targetAudience"
-              type="text"
-              value={targetAudience}
-              onChange={(e) => setTargetAudience(e.target.value)}
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block font-bold mb-2" htmlFor="platforms">
-              What Social Media platforms do you use or plan on using?
-            </label>
-            <div className="grid grid-cols-2">
-              <div className="flex items-center">
-                <input
-                  className="checkbox checkbox-primary"
-                  id="platform-twitter"
-                  type="checkbox"
-                  value="Twitter"
-                  onChange={handlePlatformChange}
-                />
-                <label htmlFor="platform-twitter" className="p-2">
-                  Twitter
-                </label>
+            <div className="mb-4">
+              <label
+                className="block font-bold mb-2"
+                htmlFor="businessDescription"
+              >
+                Please provide a brief description of your business or content.
+              </label>
+              <div className="pb-2">
+                <p className="opacity-50 underline">Examples</p>
+                <ul className="opacity-50 list-disc ml-10 text-s">
+                  <li>Competitive League of Legends streamer</li>
+                  <li>Local gardening and lawncare</li>
+                  <li>
+                    Handmade crafts and collectibles seller and content creator
+                  </li>
+                </ul>
               </div>
-              <div className="flex items-center">
-                <input
-                  className="checkbox checkbox-primary"
-                  id="platform-facebook"
-                  type="checkbox"
-                  value="Facebook"
-                  onChange={handlePlatformChange}
-                />
-                <label htmlFor="platform-facebook" className="p-2">
-                  Facebook
-                </label>
+              <textarea
+                className="input input-bordered input-primary w-full max-w-s h-24"
+                id="businessDescription"
+                value={businessDescription}
+                onChange={(e) => setBusinessDescription(e.target.value)}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block font-bold mb-2" htmlFor="targetAudience">
+                What is your target audience or ideal customer?
+              </label>
+              <div className="pb-2">
+                <p className="opacity-50 underline">Examples</p>
+                <ul className="opacity-50 list-disc ml-10">
+                  <li>All ages</li>
+                  <li>Young men and women ages 18 - 25</li>
+                  <li>Teenagers and young adults</li>
+                </ul>
               </div>
-              <div className="flex items-center">
-                <input
-                  className="checkbox checkbox-primary"
-                  id="platform-youtube"
-                  type="checkbox"
-                  value="Youtube"
-                  onChange={handlePlatformChange}
-                />
-                <label htmlFor="platform-youtube" className="p-2">
-                  Youtube
-                </label>
-              </div>
-              <div className="flex items-center">
-                <input
-                  className="checkbox checkbox-primary"
-                  id="platform-instagram"
-                  type="checkbox"
-                  value="Instagram"
-                  onChange={handlePlatformChange}
-                />
-                <label htmlFor="platform-instagram" className="p-2">
-                  Instagram
-                </label>
-              </div>
-              <div className="flex items-center">
-                <input
-                  className="checkbox checkbox-primary"
-                  id="platform-linkedin"
-                  type="checkbox"
-                  value="LinkedIn"
-                  onChange={handlePlatformChange}
-                />
-                <label htmlFor="platform-linkedin" className="p-2">
-                  LinkedIn
-                </label>
-              </div>
-              <div className="flex items-center">
-                <input
-                  className="checkbox checkbox-primary"
-                  id="platform-twitch"
-                  type="checkbox"
-                  value="Twitch"
-                  onChange={handlePlatformChange}
-                />
-                <label htmlFor="platform-twitch" className="p-2">
-                  Twitch
-                </label>
-              </div>
-              <div className="flex items-center">
-                <input
-                  className="checkbox checkbox-primary"
-                  id="platform-pinterest"
-                  type="checkbox"
-                  value="Pinterest"
-                  onChange={handlePlatformChange}
-                />
-                <label htmlFor="platform-pinterest" className="p-2">
-                  Pinterest
-                </label>
+              <input
+                className="input input-bordered input-primary w-full max-w-s"
+                id="targetAudience"
+                type="text"
+                value={targetAudience}
+                onChange={(e) => setTargetAudience(e.target.value)}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block font-bold mb-2" htmlFor="platforms">
+                What Social Media platforms do you use or plan on using?
+              </label>
+              <div className="grid grid-cols-2">
+                <div className="flex items-center">
+                  <input
+                    className="checkbox checkbox-primary"
+                    id="platform-twitter"
+                    type="checkbox"
+                    value="Twitter"
+                    onChange={handlePlatformChange}
+                  />
+                  <label htmlFor="platform-twitter" className="p-2">
+                    Twitter
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    className="checkbox checkbox-primary"
+                    id="platform-facebook"
+                    type="checkbox"
+                    value="Facebook"
+                    onChange={handlePlatformChange}
+                  />
+                  <label htmlFor="platform-facebook" className="p-2">
+                    Facebook
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    className="checkbox checkbox-primary"
+                    id="platform-youtube"
+                    type="checkbox"
+                    value="Youtube"
+                    onChange={handlePlatformChange}
+                  />
+                  <label htmlFor="platform-youtube" className="p-2">
+                    Youtube
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    className="checkbox checkbox-primary"
+                    id="platform-instagram"
+                    type="checkbox"
+                    value="Instagram"
+                    onChange={handlePlatformChange}
+                  />
+                  <label htmlFor="platform-instagram" className="p-2">
+                    Instagram
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    className="checkbox checkbox-primary"
+                    id="platform-linkedin"
+                    type="checkbox"
+                    value="LinkedIn"
+                    onChange={handlePlatformChange}
+                  />
+                  <label htmlFor="platform-linkedin" className="p-2">
+                    LinkedIn
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    className="checkbox checkbox-primary"
+                    id="platform-twitch"
+                    type="checkbox"
+                    value="Twitch"
+                    onChange={handlePlatformChange}
+                  />
+                  <label htmlFor="platform-twitch" className="p-2">
+                    Twitch
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    className="checkbox checkbox-primary"
+                    id="platform-pinterest"
+                    type="checkbox"
+                    value="Pinterest"
+                    onChange={handlePlatformChange}
+                  />
+                  <label htmlFor="platform-pinterest" className="p-2">
+                    Pinterest
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex items-center justify-between">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={!isFormComplete}
-            >
-              {isFormComplete
-                ? "Save and Continue"
-                : "Please fill out all fields"}
-            </button>
-          </div>
-        </form>
-      </section>
-    </PrivateRoute>
+            <div className="flex items-center justify-between">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={!isFormComplete}
+              >
+                {isFormComplete
+                  ? "Save and Continue"
+                  : "Please fill out all fields"}
+              </button>
+            </div>
+          </form>
+        </section>
+      </PrivateRoute>
+    </main>
   );
 };
 

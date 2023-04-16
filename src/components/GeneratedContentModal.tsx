@@ -1,60 +1,69 @@
 import React, { useState } from "react";
+import { saveGeneratedContent } from "@/utils/contentUtils";
 
-// TODO: get this working then clean up get started and signup
 interface GeneratedContentModalProps {
-  isOpen: boolean;
+  showModal: boolean;
   onClose: () => void;
   content: string;
-  onSave: (content: string) => void;
-  onDelete: () => void;
+  userId: string;
+  selectedPlatform: string;
+  contentType: string;
 }
 
 const GeneratedContentModal: React.FC<GeneratedContentModalProps> = ({
-  isOpen,
+  showModal,
   onClose,
   content,
-  onSave,
-  onDelete,
+  userId,
+  selectedPlatform,
+  contentType,
 }) => {
   const [editedContent, setEditedContent] = useState(content);
+  const modalId = "generated-content-modal";
 
-  if (!isOpen) {
+  if (!showModal) {
     return null;
   }
 
   const handleSave = () => {
-    onSave(editedContent);
+    const contentCategory = selectedPlatform.toLowerCase().concat(contentType);
+    saveGeneratedContent(userId, editedContent, contentCategory);
     onClose();
   };
 
   const handleDelete = () => {
-    onDelete();
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="w-full max-w-md p-6 mx-auto bg-base-300 rounded-xl shadow-md">
-        <h2 className="text-2xl font-bold mb-4">Generated Content</h2>
-        <textarea
-          className="textarea textarea-bordered w-full mb-4"
-          value={editedContent}
-          onChange={(e) => setEditedContent(e.target.value)}
-        />
-        <div className="flex justify-end">
-          <button onClick={handleDelete} className="btn btn-error mx-2">
-            Delete
-          </button>
-          <button onClick={handleSave} className="btn btn-primary mx-2">
-            Save
-          </button>
+    <>
+      <input
+        type="checkbox"
+        id={modalId}
+        className="modal-toggle"
+        checked={showModal}
+        readOnly
+      />
+      <div className="modal">
+        <div className="modal-box">
+          <h2 className="text-2xl font-bold mb-4">Generated Content</h2>
+          <textarea
+            className="textarea textarea-bordered w-full mb-4"
+            value={editedContent}
+            onChange={(e) => setEditedContent(e.target.value)}
+            style={{ height: "175px" }}
+          />
+          <div className="modal-action">
+            <button onClick={handleDelete} className="btn btn-error mx-2">
+              Delete
+            </button>
+            <button onClick={handleSave} className="btn btn-primary mx-2">
+              Save
+            </button>
+          </div>
         </div>
       </div>
-      <div
-        className="fixed inset-0 bg-black opacity-50"
-        onClick={onClose}
-      ></div>
-    </div>
+    </>
   );
 };
 

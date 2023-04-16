@@ -33,14 +33,14 @@ const DashboardPage: React.FC = () => {
   }, [loadingProfile, hasProfile, router]);
   return (
     <PrivateRoute>
-      <div className="h-full md:h-screen">
+      <div className="h-full lg:h-screen">
         <Navbar />
         <div className="container mx-auto">
           <h1 className="text-3xl text-primary font-bold text-center p-2">
             Dashboard
           </h1>
           {user ? (
-            <main className="grid w-full grid-cols-1 md:grid-cols-2 justify-center">
+            <main className="grid w-full grid-cols-1 lg:grid-cols-2 justify-center">
               <section className="w-full">
                 <div className="pt-4 px-2">
                   <UserCard />
@@ -67,8 +67,6 @@ const DashboardPage: React.FC = () => {
                   >
                     Generate 💻
                   </a>
-
-                  {/* <a className="tab">Tab 3</a> */}
                 </div>
                 {(() => {
                   switch (activeTab) {

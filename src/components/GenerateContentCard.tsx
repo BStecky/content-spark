@@ -2,12 +2,34 @@ import React, { useEffect, useState } from "react";
 import { useUserProfile } from "@/hooks/userProfileContext";
 import { User, UserProfile } from "firebase/auth";
 import { generateContent } from "../api/openai";
+import GeneratedContentModal from "./GeneratedContentModal";
 import { saveGeneratedContent } from "@/utils/contentUtils";
 
 interface GenerateContentCardProps {
   user: User | null;
   userProfile: UserProfile;
 }
+
+type PlatformContentOptions = {
+  [key: string]: string[];
+};
+
+const platformContentOptions: PlatformContentOptions = {
+  Twitter: ["Tweet", "Reply", "Thread"],
+  LinkedIn: ["Post", "Reply"],
+  // Add new platforms and their content options here
+};
+
+type PlatformContentSelectedOptions = {
+  [key: string]: {
+    inputs: Array<{
+      id: string;
+      label: string;
+      placeholder: string;
+      stateUpdater: (value: any) => void;
+    }>;
+  };
+};
 
 const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
   user,
@@ -19,27 +41,10 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
   const [contentType, setContentType] = useState("");
   const [replyTo, setReplyTo] = useState("");
   const [about, setAbout] = useState("");
-
-  type PlatformContentOptions = {
-    [key: string]: string[];
-  };
-
-  const platformContentOptions: PlatformContentOptions = {
-    Twitter: ["Tweet", "Reply", "Thread"],
-    LinkedIn: ["Post", "Reply"],
-    // Add new platforms and their content options here
-  };
-
-  type PlatformContentSelectedOptions = {
-    [key: string]: {
-      inputs: Array<{
-        id: string;
-        label: string;
-        placeholder: string;
-        stateUpdater: (value: any) => void;
-      }>;
-    };
-  };
+  const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [generatedText, setGeneratedText] = useState("");
+  const [editedContent, setEditedContent] = useState("");
 
   const platformContentSelectedOptions: PlatformContentSelectedOptions = {
     Tweet: {
@@ -102,14 +107,21 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
     const targetType = userProfile.targetAudience;
     const tone = selectedTone.toLowerCase();
     let prompt = `
-    I am a ${userProfile.userType} and I want to create a tweet. 
-    Info about me or my business : ${userProfile.businessDescription}, ${businessName}. 
-    Tweet Tone: ${tone} Target audience: ${targetType}. `;
-    if (contentType === "reply") {
-      prompt += `Reply to the following tweet: "${replyTo}". `;
-    } else {
-      prompt += `The ${contentType} should be about ${about}. `;
+    Instruction: Please generate an engaging ${selectedPlatform} ${contentType} do not use hashtags.
+    About me: I am a ${userProfile.userType}. 
+    Info about me or my business: ${userProfile.businessDescription}, ${businessName}. 
+    Post Tone: ${tone} 
+    Target audience: ${targetType}.`;
+    switch (contentType) {
+      case "Thread":
+        prompt += `\n Thread length: ${threadLength} tweets. `;
+        prompt += `\n Thread context: ${about}. `;
+      case "Reply":
+        prompt += `\n Reply to the following tweet: "${replyTo}". `;
+      default:
+        prompt += `\n ${contentType} context: ${about}. `;
     }
+
     console.log("Completed prompt: ", prompt);
     return prompt;
   }
@@ -135,27 +147,24 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
     );
     const options = {
       message: prompt,
-      context: "Tweet Generator",
-      maxTokens: 50,
+      context:
+        "You are a professional content creator assistant here to help anyone grow their business or brand.",
+      maxTokens: 100,
       n: 1,
       temperature: 0.7,
     };
 
     try {
+      setLoading(true);
       const response = await generateContent(options);
       if (response && response.length > 0) {
-        const generatedText = response;
-        console.log("Generated text: ", generatedText);
+        console.log("Generated text: ", response);
         console.log("Platform: ", selectedPlatform);
         console.log("Content type: ", contentType);
-        const contentCategory = selectedPlatform
-          .toLowerCase()
-          .concat(contentType);
-        console.log("Content category: ", contentCategory);
-        if (user) {
-          saveGeneratedContent(user.uid, generatedText, contentCategory);
-        }
-        // Display the generated text or handle it as needed
+        setGeneratedText(response);
+        setEditedContent(response);
+        setShowModal(true);
+        setLoading(false);
       } else {
         console.log("No content was generated.");
       }
@@ -189,6 +198,18 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
     ));
   };
 
+  const handleSave = () => {
+    const contentCategory = selectedPlatform.toLowerCase().concat(contentType);
+    if (user) {
+      saveGeneratedContent(user?.uid, editedContent, contentCategory);
+    }
+    setShowModal(false);
+  };
+
+  const handleDelete = () => {
+    setShowModal(false);
+  };
+
   return (
     <div className="w-[100%] h-full card bg-base-300 mx-auto p-10 shadow-xl">
       <div className="card-body">
@@ -200,7 +221,8 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
             Platform:
           </label>
           <div className="flex flex-wrap justify-evenly p-4 max-w-md">
-            {["Twitter", "LinkedIn"].map((platform) => (
+            {/* Add more platforms to this array when I'm ready. */}
+            {["Twitter"].map((platform) => (
               <div key={platform} className="form-control">
                 <label className="label cursor-pointer">
                   <span className="label-text px-2">{platform}</span>
@@ -253,8 +275,7 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
           <div className="grid grid-cols-2 p-4 max-w-md">
             {renderContentTypeOptions(selectedPlatform)}
           </div>
-
-          {contentType === "thread" && (
+          {contentType === "Thread" && (
             <div className="w-full flex flex-col items-center">
               <label htmlFor="thread-length" className="text-md">
                 Thread Length:
@@ -309,18 +330,59 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
                 className="textarea textarea-bordered w-full"
                 onChange={(e) => input.stateUpdater(e.target.value)}
                 placeholder={input.placeholder}
+                style={{ height: "125px" }}
               />
             </div>
           ))}
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            className="btn btn-primary m-4"
-          >
-            Generate
-          </button>
+          {!loading ? (
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="btn btn-primary m-4"
+            >
+              Generate
+            </button>
+          ) : (
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="btn btn-primary m-4 loading"
+            >
+              Generating...
+            </button>
+          )}
         </form>
       </div>
+      {user?.uid && showModal && (
+        <div>
+          <input
+            type="checkbox"
+            id="generated-content-modal"
+            className="modal-toggle"
+            checked={showModal}
+            readOnly
+          />
+          <div className="modal">
+            <div className="modal-box">
+              <h2 className="text-2xl font-bold mb-4">Generated Content</h2>
+              <textarea
+                className="textarea textarea-bordered w-full mb-4"
+                value={editedContent}
+                onChange={(e) => setEditedContent(e.target.value)}
+                style={{ height: "175px" }}
+              />
+              <div className="modal-action">
+                <button onClick={handleDelete} className="btn btn-error mx-2">
+                  Delete
+                </button>
+                <button onClick={handleSave} className="btn btn-primary mx-2">
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

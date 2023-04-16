@@ -21,7 +21,7 @@ const UserCard: React.FC = () => {
           <p>Target Audience: {userProfile?.targetAudience}</p>
           <p>Platforms: {userProfile?.platforms.join(", ")}</p>
         </div>
-        <div className="m-auto card card-body bg-base-100">
+        <div className="m-auto card card-body bg-base-100 items-center">
           <h2 className="font-bold text-lg text-center">Sparks</h2>
           <div
             className="radial-progress text-primary"

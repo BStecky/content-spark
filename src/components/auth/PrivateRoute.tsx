@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useAuth } from "@/hooks/useAuth";
-import { useUserProfile } from "@/hooks/userProfileContext"; // Import the useUserProfile hook
-import { useEffect } from "react";
+import { useUserProfile } from "@/hooks/userProfileContext";
+import { useEffect, useState } from "react";
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -15,18 +15,23 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   const { user, loading } = useAuth();
   const { userProfile, loading: userProfileLoading } = useUserProfile(
     user?.uid
-  ); // Use the useUserProfile hook
+  );
   const router = useRouter();
+  const [routePerformed, setRoutePerformed] = useState(false);
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login");
-    } else if (!loading && user && !userProfile && !userProfileLoading) {
-      router.push("/getStarted");
+    if (!routePerformed) {
+      if (!loading && !user) {
+        router.push("/login");
+        setRoutePerformed(true);
+      } else if (!loading && user && !userProfile && !userProfileLoading) {
+        router.push("/getStarted");
+        setRoutePerformed(true);
+      }
     }
-  }, [user, loading, router, userProfile, userProfileLoading]);
+  }, [user, loading, router, userProfile, userProfileLoading, routePerformed]);
 
-  return <>{!loading && user && children}</>;
+  return <>{!loading && user && <div>{children}</div>}</>;
 };
 
 export default PrivateRoute;
