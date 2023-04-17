@@ -33,7 +33,7 @@ const DashboardPage: React.FC = () => {
   }, [loadingProfile, hasProfile, router]);
   return (
     <PrivateRoute>
-      <div className="h-full lg:h-screen">
+      <div className="h-screen">
         <Navbar />
         <div className="container mx-auto">
           <h1 className="text-3xl text-primary font-bold text-center p-2">
