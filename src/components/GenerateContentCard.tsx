@@ -3,7 +3,7 @@ import { useUserProfile } from "@/hooks/userProfileContext";
 import { User, UserProfile } from "firebase/auth";
 import { generateContent } from "../api/openai";
 import GeneratedContentModal from "./GeneratedContentModal";
-import { saveGeneratedContent } from "@/utils/contentUtils";
+import { createBasicPrompt, saveGeneratedContent } from "@/utils/contentUtils";
 
 interface GenerateContentCardProps {
   user: User | null;
@@ -96,36 +96,6 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
     // Add more content types and their input configurations here
   };
 
-  function createPrompt(
-    userProfile: UserProfile,
-    contentType: string,
-    replyTo: string,
-    about: string,
-    selectedTone: string
-  ): string {
-    const businessName = userProfile.businessName;
-    const targetType = userProfile.targetAudience;
-    const tone = selectedTone.toLowerCase();
-    let prompt = `
-    Instruction: Please generate an engaging ${selectedPlatform} ${contentType} do not use hashtags.
-    About me: I am a ${userProfile.userType}. 
-    Info about me or my business: ${userProfile.businessDescription}, ${businessName}. 
-    Post Tone: ${tone} 
-    Target audience: ${targetType}.`;
-    switch (contentType) {
-      case "Thread":
-        prompt += `\n Thread length: ${threadLength} tweets. `;
-        prompt += `\n Thread context: ${about}. `;
-      case "Reply":
-        prompt += `\n Reply to the following tweet: "${replyTo}". `;
-      default:
-        prompt += `\n ${contentType} context: ${about}. `;
-    }
-
-    console.log("Completed prompt: ", prompt);
-    return prompt;
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Check if the required fields are filled
@@ -138,12 +108,14 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
       return;
     }
     // Prepare the OpenAI API parameters
-    const prompt = createPrompt(
+    const prompt = createBasicPrompt(
       userProfile,
       contentType,
       replyTo,
       about,
-      selectedTone
+      selectedTone,
+      selectedPlatform,
+      threadLength
     );
     const options = {
       message: prompt,

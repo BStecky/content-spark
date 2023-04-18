@@ -10,6 +10,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { firestore } from "./firebase"; // Import your firebase configuration file here
+import { UserProfile } from "firebase/auth";
 
 interface Tweet {
   id: string;
@@ -58,9 +59,61 @@ const getCollectionForContentType = (contentType: string): string | null => {
       return "twitterComments";
     case "twitterReply":
       return "twitterReplies";
+    case "contentSpark":
+      return "contentSparks";
     default:
       return null;
   }
+};
+
+export const createBasicPrompt = (
+  userProfile: UserProfile,
+  contentType: string,
+  replyTo: string,
+  about: string,
+  selectedTone: string,
+  selectedPlatform: string,
+  threadLength: number
+): string => {
+  const businessName = userProfile.businessName;
+  const targetType = userProfile.targetAudience;
+  const tone = selectedTone.toLowerCase();
+  let prompt = `
+  Instruction: Please generate an engaging ${selectedPlatform} ${contentType} do not use hashtags.
+  About me: I am a ${userProfile.userType}. 
+  Info about me or my business: ${userProfile.businessDescription}, ${businessName}. 
+  Post Tone: ${tone} 
+  Target audience: ${targetType}.`;
+  switch (contentType) {
+    case "Thread":
+      prompt += `\n Thread length: ${threadLength} tweets. `;
+      prompt += `\n Thread context: ${about}. `;
+    case "Reply":
+      prompt += `\n Reply to the following tweet: "${replyTo}". `;
+    default:
+      prompt += `\n ${contentType} context: ${about}. `;
+  }
+
+  console.log("Completed prompt: ", prompt);
+  return prompt;
+};
+
+export const createBasicSparkPrompt = (
+  userProfile: UserProfile,
+  theme: string,
+  keywords: string[]
+): string => {
+  const targetAudience = userProfile.targetAudience;
+  const businessName = userProfile.businessName;
+  const userType = userProfile.userType;
+
+  let prompt = `Generate three content ideas for a ${userType}, their business name is ${businessName} and 
+  the description is {businessDescription}.
+  The content theme should be ${theme}.
+  Reference the following keywords: ${keywords}. 
+  The target audience is ${targetAudience}`;
+
+  return prompt;
 };
 
 // TODO: Potentially abstract the tweet related functions to "twitterUtils.ts"

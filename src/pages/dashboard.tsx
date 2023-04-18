@@ -17,7 +17,7 @@ import GenerateSparkCard from "@/components/GenerateSparkCard";
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
   const [loadingProfile, setLoadingProfile] = useState(true);
-  const [activeTab, setActiveTab] = useState("generateContent");
+  const [activeTab, setActiveTab] = useState("spark");
   const router = useRouter();
   const { userProfile } = useUserProfile(user?.uid);
   const hasProfile = userProfile !== null;
@@ -60,7 +60,7 @@ const DashboardPage: React.FC = () => {
                     Spark ✨
                   </a>
                   <a
-                    className={`tab  ${
+                    className={`tab ${
                       activeTab === "generateContent" ? "tab-active" : ""
                     } `}
                     onClick={() => handleTabClick("generateContent")}
