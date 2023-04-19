@@ -54,3 +54,7 @@ export const generateContent = async (
 
   return response.data.choices[0].message?.content;
 };
+
+// TODO: Add different generateContent options, as well as an option to save some sort of history
+// of the generated content to continue a conversation regarding it.
+// maybe a premium service gets access to GPT-4 API calls

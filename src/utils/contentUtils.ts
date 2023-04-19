@@ -113,6 +113,7 @@ export const createBasicSparkPrompt = (
   Reference the following keywords: ${keywords}. 
   The target audience is ${targetAudience}`;
 
+  console.log("Completed prompt: ", prompt);
   return prompt;
 };
 

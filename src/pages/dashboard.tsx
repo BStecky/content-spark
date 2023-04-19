@@ -33,15 +33,16 @@ const DashboardPage: React.FC = () => {
   }, [loadingProfile, hasProfile, router]);
   return (
     <PrivateRoute>
-      <div className="h-screen">
+      <div className="">
         <Navbar />
         <div className="container mx-auto">
           <h1 className="text-3xl text-primary font-bold text-center p-2">
             Dashboard
           </h1>
           {user ? (
-            <main className="grid w-full grid-cols-1 lg:grid-cols-2 justify-center">
-              <section className="w-full">
+            // <main className="grid w-full grid-cols-1 lg:grid-cols-2 justify-center">
+            <main className="">
+              <section className="grid lg:grid-flow-col lg:w-full">
                 <div className="pt-4 px-2">
                   <UserCard />
                 </div>
@@ -49,7 +50,7 @@ const DashboardPage: React.FC = () => {
                   <GeneratedTweetsCard />
                 </div>
               </section>
-              <section className="w-full p-4 flex flex-col">
+              <section className="w-full col-span-2 px-2 flex flex-col mt-2">
                 <div className="tabs tabs-boxed mx-auto">
                   <a
                     className={`tab ${
@@ -78,7 +79,12 @@ const DashboardPage: React.FC = () => {
                         />
                       );
                     case "spark":
-                      return <GenerateSparkCard />;
+                      return (
+                        <GenerateSparkCard
+                          user={user}
+                          userProfile={userProfile}
+                        />
+                      );
                     default:
                       return null;
                   }
