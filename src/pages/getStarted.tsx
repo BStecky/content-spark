@@ -29,6 +29,9 @@ const GetStarted: React.FC = () => {
           businessDescription,
           targetAudience,
           platforms,
+          planId: "free", // Set the default planId here
+          apiCallUsage: 0, // Initialize apiCallUsage
+          lastApiCallReset: new Date(), // Initialize lastApiCallReset with the current dat
         });
         setError("");
         await updateUserProfile();
