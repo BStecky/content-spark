@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
     <div className="navbar bg-base-200">
       <div className="flex-1">
         <Link className="btn btn-ghost normal-case text-xl" href="/">
-          ContentSpark
+          Content Spark ✨
         </Link>
       </div>
       <div className="flex-none">
@@ -30,28 +30,28 @@ const Navbar: React.FC = () => {
                   <button>Login</button>
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/signup">
                   <button>Sign Up</button>
                 </Link>
-              </li>
+              </li> */}
             </>
           )}
           {user && (
             <div>
               <Link href="/dashboard">
-                <button className="btn-sm btn-outline btn-primary m-2">
+                <button className="btn-sm btn-outline rounded-lg btn-primary m-2 ease-in-out duration-200">
                   Dashboard
                 </button>
               </Link>
               <Link href="/profile">
-                <button className="btn-sm btn-outline btn-primary m-2">
+                <button className="btn-sm btn-outline rounded-lg btn-primary m-2 ease-in-out duration-200">
                   Profile
                 </button>
               </Link>
               <button
                 onClick={handleSignOut}
-                className="btn-sm btn-outline btn-secondary m-2"
+                className="btn-sm btn-outline rounded-lg btn-accent m-2 ease-in-out duration-200"
               >
                 Sign Out
               </button>

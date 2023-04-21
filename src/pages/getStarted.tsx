@@ -73,13 +73,14 @@ const GetStarted: React.FC = () => {
     <main className="min-h-screen lg:min-h-screen">
       <PrivateRoute>
         <Navbar></Navbar>
-        <section className="max-w-lg bg-base-300 mx-auto p-10 rounded-lg mt-10">
+        <section className="max-w-lg bg-base-200 mx-auto p-10 rounded-lg mt-10 shadow-xl">
           <h2 className="text-center text-2xl font-bold mb-4">Get Started</h2>
           {error && <p className="text-red-500 mb-4">{error}</p>}
           <form onSubmit={handleSubmit} className="w-full max-w-sm mx-auto">
             <div className="mb-4">
               <label className="block font-bold mb-2" htmlFor="userType">
-                Are you a small business owner, content creator, or both?
+                Are you a small business owner, content creator, or solo
+                entrepreneur?
               </label>
               <select
                 className="input input-bordered input-primary w-full max-w-s"
@@ -87,14 +88,12 @@ const GetStarted: React.FC = () => {
                 value={userType}
                 onChange={(e) => setUserType(e.target.value)}
               >
-                <option value="">Select an option</option>
+                <option value="">Select what you identify with most</option>
                 <option value="Small Business Owner">
                   Small Business Owner
                 </option>
                 <option value="Content Creator">Content Creator</option>
-                <option value="Small Business Owner and Content Creator">
-                  Both
-                </option>
+                <option value="Solo Entrepreneur">Solo Entrepreneur</option>
               </select>
             </div>
             {/* Add more questions as needed */}
@@ -141,9 +140,9 @@ const GetStarted: React.FC = () => {
               <div className="pb-2">
                 <p className="opacity-50 underline">Examples</p>
                 <ul className="opacity-50 list-disc ml-10">
-                  <li>All ages</li>
-                  <li>Young men and women ages 18 - 25</li>
-                  <li>Teenagers and young adults</li>
+                  <li>All ages who use computers</li>
+                  <li>Young adults interested in twitter</li>
+                  <li>Anybody who likes candles</li>
                 </ul>
               </div>
               <input

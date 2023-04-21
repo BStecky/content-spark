@@ -4,7 +4,7 @@ import SignUpForm from "../components/auth/SignUpForm";
 
 const SignUpPage: React.FC = () => {
   return (
-    <div>
+    <div className="">
       <SignUpForm />
     </div>
   );

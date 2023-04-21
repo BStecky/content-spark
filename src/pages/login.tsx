@@ -4,7 +4,7 @@ import SignUpForm from "../components/auth/SignUpForm";
 
 const LoginPage: React.FC = () => {
   return (
-    <div>
+    <div className="h-screen">
       <LoginForm />
     </div>
   );

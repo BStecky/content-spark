@@ -5,6 +5,8 @@ import {
   onAuthStateChanged,
   User,
   signOut as firebaseSignOut,
+  isSignInWithEmailLink,
+  signInWithEmailLink,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
 
@@ -43,6 +45,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         router.push("/dashboard");
       }
     });
+
+    // Email link sign-in handling
+    const handleEmailSignIn = async () => {
+      if (isSignInWithEmailLink(auth, window.location.href)) {
+        let email = window.localStorage.getItem("emailForSignIn");
+        if (!email) {
+          email = window.prompt("Please provide your email for confirmation");
+        } else {
+          try {
+            await signInWithEmailLink(auth, email, window.location.href);
+            window.localStorage.removeItem("emailForSignIn");
+            router.push("/dashboard");
+          } catch (err: any) {
+            console.error("Error signing in with email link:", err);
+          }
+        }
+      }
+    };
+
+    handleEmailSignIn();
 
     return () => unsubscribe();
   }, []);

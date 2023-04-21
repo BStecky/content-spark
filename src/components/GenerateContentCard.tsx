@@ -121,7 +121,7 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
       message: prompt,
       context:
         "You are a professional content creator assistant here to help anyone grow their business or brand.",
-      maxTokens: 100,
+      maxTokens: 300,
       n: 1,
       temperature: 0.7,
     };
@@ -149,7 +149,7 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
     return platformContentOptions[platform]?.map((contentOption: string) => (
       <div
         key={contentOption}
-        className="form-control hover:outline outline-2 outline-primary m-1 rounded-md ease-in-out-[0.2s]"
+        className="form-control hover:outline outline-2 outline-primary bg-base-100 rounded-lg"
       >
         <div className="">
           <label className="label cursor-pointer">
@@ -183,19 +183,22 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
   };
 
   return (
-    <div className="w-[100%] h-full card bg-base-300 mx-auto p-10 shadow-xl">
+    <div className="w-[100%] h-full card bg-base-200 mx-auto p-10 shadow-xl">
       <div className="card-body">
         <h2 className="text-2xl card-title font-bold text-center">
           Generate Content
         </h2>
-        <form onSubmit={handleSubmit} className="w-full max-w-sm mx-auto">
+        <form onSubmit={handleSubmit} className="w-full max-w-lg mx-auto">
           <label htmlFor="platform" className="text-md">
             Platform:
           </label>
-          <div className="flex flex-wrap justify-evenly p-4 max-w-md">
+          <div className="flex flex-wrap justify-evenly p-4 max-w-lg mx-auto">
             {/* Add more platforms to this array when I'm ready. */}
             {["Twitter"].map((platform) => (
-              <div key={platform} className="form-control">
+              <div
+                key={platform}
+                className="form-control hover:outline outline-2 outline-primary bg-base-100 rounded-lg"
+              >
                 <label className="label cursor-pointer">
                   <span className="label-text px-2">{platform}</span>
                   <input
@@ -214,7 +217,7 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
           <label htmlFor="tone" className="text-md">
             Choose a tone:
           </label>
-          <div className="grid grid-cols-2 justify-evenly p-4 max-w-md">
+          <div className="grid grid-cols-2 gap-2 justify-evenly p-4 max-w-lg mx-auto">
             {[
               "Professional",
               "Friendly",
@@ -224,7 +227,7 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
             ].map((tone) => (
               <div
                 key={tone}
-                className="form-control hover:outline outline-2 outline-primary m-1 rounded-md ease-in-out-[0.2s]"
+                className="form-control hover:outline outline-2 outline-primary bg-base-100 rounded-lg"
               >
                 <label className="label cursor-pointer">
                   <span className="label-text px-2">{tone}</span>
@@ -244,7 +247,7 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
           <label htmlFor="content-type" className="text-md">
             Content Type:
           </label>
-          <div className="grid grid-cols-2 p-4 max-w-md">
+          <div className="grid grid-cols-2 gap-2 p-4 max-w-lg mx-auto">
             {renderContentTypeOptions(selectedPlatform)}
           </div>
           {contentType === "Thread" && (

@@ -22,6 +22,9 @@ module.exports = {
       "light",
       "dark",
       "luxury",
+      "bumblebee",
+      "lemonade",
+      "halloween",
     ],
   },
   theme: {

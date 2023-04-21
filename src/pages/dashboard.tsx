@@ -13,6 +13,7 @@ import UserCard from "@/components/UserCard";
 import GenerateContentCard from "@/components/GenerateContentCard";
 import GeneratedTweetsCard from "@/components/GeneratedTweetsCard";
 import GenerateSparkCard from "@/components/GenerateSparkCard";
+import GeneratedIdeasCard from "@/components/GeneratedIdeasCard";
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -33,7 +34,7 @@ const DashboardPage: React.FC = () => {
   }, [loadingProfile, hasProfile, router]);
   return (
     <PrivateRoute>
-      <div className="">
+      <div className="min-h-screen">
         <Navbar />
         <div className="container mx-auto">
           <h1 className="text-3xl text-primary font-bold text-center p-2">
@@ -42,12 +43,21 @@ const DashboardPage: React.FC = () => {
           {user ? (
             // <main className="grid w-full grid-cols-1 lg:grid-cols-2 justify-center">
             <main className="">
-              <section className="grid lg:grid-flow-col lg:w-full">
-                <div className="pt-4 px-2">
+              <section className="grid lg:grid-cols-2 lg:w-full">
+                <div className="py-4 px-2">
                   <UserCard />
                 </div>
                 <div className="py-4 px-2">
-                  <GeneratedTweetsCard />
+                  {(() => {
+                    switch (activeTab) {
+                      case "generateContent":
+                        return <GeneratedTweetsCard />;
+                      case "spark":
+                        return <GeneratedIdeasCard />;
+                      default:
+                        return null;
+                    }
+                  })()}
                 </div>
               </section>
               <section className="w-full col-span-2 px-2 flex flex-col mt-2">

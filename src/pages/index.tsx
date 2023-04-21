@@ -7,13 +7,21 @@ const HomePage: React.FC = () => {
   const { user, signOut } = useAuth();
 
   return (
-    <div className=" h-screen text-center">
+    <main className="h-screen text-center">
       <Navbar />
-      <h1 className="text-3xl font-bold text-center pt-10 text-primary">
-        Welcome to ContentSpark.io
-      </h1>
-      <h2>This is the homepage containing information</h2>
-    </div>
+      <section className="max-w-md mx-auto">
+        <h1 className="text-5xl font-bold text-center pt-10">
+          Welcome to ContentSpark.io ✨
+        </h1>
+        <h2 className="py-6">
+          I'm not supposed to focus on the landing page so why don't you just
+          check the app out?
+        </h2>
+        <Link href="/login">
+          <button className="btn btn-primary">Get Started</button>
+        </Link>
+      </section>
+    </main>
   );
 };
 

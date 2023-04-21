@@ -19,6 +19,13 @@ interface Tweet {
   createdAt: Date;
 }
 
+interface Idea {
+  id: string;
+  content: string;
+  userId: string;
+  createdAt: Date;
+}
+
 export const saveGeneratedContent = async (
   userId: string,
   generatedText: string,
@@ -59,8 +66,8 @@ const getCollectionForContentType = (contentType: string): string | null => {
       return "twitterComments";
     case "twitterReply":
       return "twitterReplies";
-    case "contentSpark":
-      return "contentSparks";
+    case "contentIdeas":
+      return "contentIdeas";
     default:
       return null;
   }
@@ -100,15 +107,20 @@ export const createBasicPrompt = (
 
 export const createBasicSparkPrompt = (
   userProfile: UserProfile,
+  contentType: string,
   theme: string,
   keywords: string[]
 ): string => {
   const targetAudience = userProfile.targetAudience;
   const businessName = userProfile.businessName;
+  const businessDescription = userProfile.businessDescription;
   const userType = userProfile.userType;
 
-  let prompt = `Generate three content ideas for a ${userType}, their business name is ${businessName} and 
-  the description is {businessDescription}.
+  if ((contentType = "anything")) {
+    contentType = "random social media content";
+  }
+  let prompt = `Generate three ${contentType} ideas for a ${userType}, their business name is ${businessName} and 
+  the description is ${businessDescription}.
   The content theme should be ${theme}.
   Reference the following keywords: ${keywords}. 
   The target audience is ${targetAudience}`;
@@ -153,5 +165,42 @@ export const deleteTweet = async (tweetId: string): Promise<void> => {
     console.log("Tweet deleted successfully.");
   } catch (error) {
     console.error("Error deleting tweet:", error);
+  }
+};
+
+export const getIdeas = async (userId: string): Promise<Idea[]> => {
+  try {
+    console.log("getIdeas", userId);
+    const ideas: Idea[] = [];
+    const querySnapshot = await getDocs(
+      query(
+        collection(firestore, "contentIdeas"),
+        where("userId", "==", userId),
+        orderBy("createdAt", "desc")
+      )
+    );
+    console.log("ideas snapshot", querySnapshot);
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      ideas.push({
+        id: doc.id,
+        content: data.content,
+        userId: data.userId,
+        createdAt: data.createdAt.toDate(),
+      });
+    });
+    return ideas;
+  } catch (error) {
+    console.error("Error fetching ideas:", error);
+    return []; // Return an empty array in case of errors
+  }
+};
+
+export const deleteIdea = async (ideaId: string): Promise<void> => {
+  try {
+    await deleteDoc(doc(firestore, "contentIdeas", ideaId));
+    console.log("Idea deleted successfully.");
+  } catch (error) {
+    console.error("Error deleting idea:", error);
   }
 };

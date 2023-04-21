@@ -26,8 +26,9 @@ const Profile: React.FC = () => {
   return (
     <PrivateRoute>
       <Navbar></Navbar>
-      <div className="flex items-center justify-center mt-10">
-        <form
+      <div className="flex items-center justify-center mt-10 h-screen">
+        Profile editing coming soon.
+        {/* <form
           onSubmit={handleSubmit}
           className="card glass p-6 space-y-6 w-full max-w-xl"
         >
@@ -83,13 +84,10 @@ const Profile: React.FC = () => {
               className="input input-bordered"
             />
           </div>
-
-          {/* Add other form fields here */}
-
           <button type="submit" className="btn btn-primary">
             Save Profile
           </button>
-        </form>
+        </form> */}
       </div>
     </PrivateRoute>
   );

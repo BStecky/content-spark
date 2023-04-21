@@ -8,7 +8,7 @@ const UserCard: React.FC = () => {
   const { userProfile } = useUserProfile(user?.uid);
 
   return (
-    <section className="card bg-base-300 w-[100%] shadow-xl">
+    <section className="card bg-base-200 w-[100%] shadow-xl">
       <div className="card-body flex flex-row justify-center align-middle">
         <div className="">
           <h1 className="card-title">
