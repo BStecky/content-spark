@@ -15,6 +15,7 @@ const LoginForm: React.FC = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [emailSent, setEmailSent] = useState(false);
+  const [loggingIn, setLoggingIn] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
