@@ -4,10 +4,12 @@ import { User, UserProfile } from "firebase/auth";
 import { generateContent } from "../api/openai";
 import GeneratedContentModal from "./GeneratedContentModal";
 import { createBasicPrompt, saveGeneratedContent } from "@/utils/contentUtils";
+import { checkAndUpdateApiUsage } from "@/utils/planUtils";
+import { CustomUserProfile } from "@/utils/firebase";
 
 interface GenerateContentCardProps {
   user: User | null;
-  userProfile: UserProfile;
+  userProfile: CustomUserProfile;
 }
 
 type PlatformContentOptions = {
@@ -127,6 +129,10 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
     };
 
     try {
+      if ((await checkAndUpdateApiUsage(userProfile, 1)) == false) {
+        console.log("Not enough API usage left.");
+        return;
+      }
       setLoading(true);
       const response = await generateContent(options);
       if (response && response.length > 0) {

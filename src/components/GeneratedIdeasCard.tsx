@@ -22,7 +22,6 @@ const GeneratedIdeasCard: React.FC = () => {
   const fetchIdeas = async () => {
     if (user) {
       const ideas = await getIdeas(user.uid);
-      console.log("got ideas: ", ideas);
       setGeneratedIdeas(ideas);
     }
   };

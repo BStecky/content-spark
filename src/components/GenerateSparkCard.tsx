@@ -4,10 +4,17 @@ import React from "react";
 import { useState } from "react";
 import { generateContent } from "@/api/openai";
 import { saveGeneratedContent } from "@/utils/contentUtils";
+import {
+  checkAndUpdateApiUsage,
+  hasUserHitApiLimit,
+  shouldResetApiLimit,
+} from "@/utils/planUtils";
+import { CustomUserProfile } from "@/utils/firebase";
+import { collection } from "firebase/firestore";
 
 interface GenerateSparkCardProps {
   user: User | null;
-  userProfile: UserProfile;
+  userProfile: CustomUserProfile;
 }
 
 const GenerateSparkCard: React.FC<GenerateSparkCardProps> = ({
@@ -84,7 +91,12 @@ const GenerateSparkCard: React.FC<GenerateSparkCardProps> = ({
     };
 
     try {
+      if ((await checkAndUpdateApiUsage(userProfile, 1)) == false) {
+        console.log("Not enough API usage left.");
+        return;
+      }
       console.log("sparking idea...");
+      setSparkingIdea(true);
       const response = await generateContent(options);
       if (response && response.length > 0) {
         console.log("Generated text: ", response);
@@ -190,7 +202,6 @@ const GenerateSparkCard: React.FC<GenerateSparkCardProps> = ({
                   sparkingIdea ? "loading" : ""
                 }`}
                 onClick={async () => {
-                  setSparkingIdea(true);
                   {
                     handleSubmit;
                   }

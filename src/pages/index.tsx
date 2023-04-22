@@ -14,7 +14,7 @@ const HomePage: React.FC = () => {
           Welcome to ContentSpark.io ✨
         </h1>
         <h2 className="py-6">
-          I'm not supposed to focus on the landing page so why don't you just
+          Im not supposed to focus on the landing page so why dont you just
           check the app out?
         </h2>
         <Link href="/login">

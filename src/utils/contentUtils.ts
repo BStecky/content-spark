@@ -9,7 +9,7 @@ import {
   doc,
   orderBy,
 } from "firebase/firestore";
-import { firestore } from "./firebase"; // Import your firebase configuration file here
+import { CustomUserProfile, firestore } from "./firebase"; // Import your firebase configuration file here
 import { UserProfile } from "firebase/auth";
 
 interface Tweet {
@@ -74,7 +74,7 @@ const getCollectionForContentType = (contentType: string): string | null => {
 };
 
 export const createBasicPrompt = (
-  userProfile: UserProfile,
+  userProfile: CustomUserProfile,
   contentType: string,
   replyTo: string,
   about: string,
@@ -101,12 +101,12 @@ export const createBasicPrompt = (
       prompt += `\n ${contentType} context: ${about}. `;
   }
 
-  console.log("Completed prompt: ", prompt);
+  // console.log("Completed prompt: ", prompt);
   return prompt;
 };
 
 export const createBasicSparkPrompt = (
-  userProfile: UserProfile,
+  userProfile: CustomUserProfile,
   contentType: string,
   theme: string,
   keywords: string[]
@@ -125,7 +125,7 @@ export const createBasicSparkPrompt = (
   Reference the following keywords: ${keywords}. 
   The target audience is ${targetAudience}`;
 
-  console.log("Completed prompt: ", prompt);
+  // console.log("Completed prompt: ", prompt);
   return prompt;
 };
 
@@ -170,7 +170,6 @@ export const deleteTweet = async (tweetId: string): Promise<void> => {
 
 export const getIdeas = async (userId: string): Promise<Idea[]> => {
   try {
-    console.log("getIdeas", userId);
     const ideas: Idea[] = [];
     const querySnapshot = await getDocs(
       query(
@@ -179,7 +178,6 @@ export const getIdeas = async (userId: string): Promise<Idea[]> => {
         orderBy("createdAt", "desc")
       )
     );
-    console.log("ideas snapshot", querySnapshot);
     querySnapshot.forEach((doc) => {
       const data = doc.data();
       ideas.push({

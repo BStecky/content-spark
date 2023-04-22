@@ -22,7 +22,6 @@ const GeneratedTweetsCard: React.FC = () => {
   const fetchTweets = async () => {
     if (user) {
       const tweets = await getTweets(user.uid);
-      console.log("got tweets: ", tweets);
       setGeneratedTweets(tweets);
     }
   };

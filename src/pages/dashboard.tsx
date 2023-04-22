@@ -83,17 +83,23 @@ const DashboardPage: React.FC = () => {
                   switch (activeTab) {
                     case "generateContent":
                       return (
-                        <GenerateContentCard
-                          user={user}
-                          userProfile={userProfile}
-                        />
+                        user &&
+                        userProfile && (
+                          <GenerateContentCard
+                            user={user}
+                            userProfile={userProfile}
+                          />
+                        )
                       );
                     case "spark":
                       return (
-                        <GenerateSparkCard
-                          user={user}
-                          userProfile={userProfile}
-                        />
+                        user &&
+                        userProfile && (
+                          <GenerateSparkCard
+                            user={user}
+                            userProfile={userProfile}
+                          />
+                        )
                       );
                     default:
                       return null;

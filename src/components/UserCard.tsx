@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 import { useUserProfile } from "@/hooks/userProfileContext";
+import { calculateApiUsagePercentage } from "@/utils/planUtils";
 
 const UserCard: React.FC = () => {
   const { user } = useAuth();
@@ -15,20 +16,24 @@ const UserCard: React.FC = () => {
             Welcome back - {userProfile?.businessName}
           </h1>
           <h2 className="text-lg font-bold underline">Profile Info</h2>
-          <p>User Type: {userProfile?.userType}</p>
-          <p>Business Name: {userProfile?.businessName}</p>
-          <p>Business Description: {userProfile?.businessDescription}</p>
+          <p>{userProfile?.userType}</p>
+          <p>Plan Type: {userProfile?.planId}</p>
+          <p>Description: {userProfile?.businessDescription}</p>
           <p>Target Audience: {userProfile?.targetAudience}</p>
-          <p>Platforms: {userProfile?.platforms.join(", ")}</p>
         </div>
-        <div className="m-auto card card-body bg-base-100 items-center">
+        <div className="m-auto card card-body bg-base-100 items-center text-center justify-center">
           <h2 className="font-bold text-lg text-center">Sparks</h2>
           <div
             className="radial-progress text-primary"
-            style={{ "--value": 70 } as React.CSSProperties}
+            style={
+              {
+                "--value": calculateApiUsagePercentage(userProfile),
+              } as React.CSSProperties
+            }
           >
-            70%
+            {Math.round(calculateApiUsagePercentage(userProfile))}%
           </div>
+          <p className="text-xs">Api Calls Left</p>
         </div>
       </div>
     </section>

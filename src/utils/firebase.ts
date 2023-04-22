@@ -26,10 +26,48 @@ const firestore = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 // const analytics = getAnalytics(app);
 
-const getUserProfile = async (userId: string) => {
+export interface CustomUserProfile {
+  id: string;
+  userType: string;
+  businessName: string;
+  businessDescription: string;
+  targetAudience: string;
+  platforms: string[];
+  planId: string;
+  apiCallUsage: number;
+  lastApiCallReset: Date;
+}
+
+const getUserProfile = async (
+  userId: string
+): Promise<CustomUserProfile | null> => {
   try {
     const userProfileDoc = await getDoc(doc(firestore, "users", userId));
-    return userProfileDoc.data() as DocumentData | null;
+    const data = userProfileDoc.data();
+    if (data) {
+      const {
+        userType,
+        businessName,
+        businessDescription,
+        targetAudience,
+        platforms,
+        planId,
+        apiCallUsage,
+        lastApiCallReset,
+      } = data;
+
+      return {
+        id: userProfileDoc.id,
+        userType,
+        businessName,
+        businessDescription,
+        targetAudience,
+        platforms,
+        planId,
+        apiCallUsage,
+        lastApiCallReset: lastApiCallReset.toDate(),
+      } as CustomUserProfile;
+    }
   } catch (err) {
     console.error("Error fetching user profile:", err);
   }

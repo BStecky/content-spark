@@ -1,24 +1,23 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { auth } from "../utils/firebase";
 import { getUserProfile } from "../utils/firebase";
+import { CustomUserProfile } from "../utils/firebase";
 
 interface UserProfileContextValue {
-  userProfile: any;
-  loading: boolean; // Add loading state
+  userProfile: CustomUserProfile | null;
+  loading: boolean;
   updateUserProfile: () => void;
 }
 
 const UserProfileContext = createContext<UserProfileContextValue>({
   userProfile: null,
-  loading: false, // Add loading state to the default context value
+  loading: false,
   updateUserProfile: () => {},
 });
 
 export const useUserProfile = (userId: string | undefined) => {
-  // Add userId parameter
   const context = useContext(UserProfileContext);
 
-  // Add an effect to update the user profile when the userId changes
   useEffect(() => {
     context.updateUserProfile();
   }, [userId]);
@@ -33,18 +32,20 @@ interface UserProfileProvider {
 export const UserProfileProvider: React.FC<UserProfileProvider> = ({
   children,
 }) => {
-  const [userProfile, setUserProfile] = useState<any>(null);
-  const [loading, setLoading] = useState<boolean>(true); // Add loading state
+  const [userProfile, setUserProfile] = useState<CustomUserProfile | null>(
+    null
+  );
+  const [loading, setLoading] = useState<boolean>(true);
 
   const updateUserProfile = async () => {
-    setLoading(true); // Set loading to true before fetching user profile
+    setLoading(true);
     if (auth.currentUser) {
       const profileData = await getUserProfile(auth.currentUser.uid);
       setUserProfile(profileData);
     } else {
       setUserProfile(null);
     }
-    setLoading(false); // Set loading to false after fetching user profile
+    setLoading(false);
   };
 
   useEffect(() => {

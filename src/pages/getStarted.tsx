@@ -31,7 +31,7 @@ const GetStarted: React.FC = () => {
           platforms,
           planId: "free", // Set the default planId here
           apiCallUsage: 0, // Initialize apiCallUsage
-          lastApiCallReset: new Date(), // Initialize lastApiCallReset with the current dat
+          lastApiCallReset: new Date(), // Initialize lastApiCallReset with the current date
         });
         setError("");
         await updateUserProfile();
@@ -99,7 +99,8 @@ const GetStarted: React.FC = () => {
             {/* Add more questions as needed */}
             <div className="mb-4">
               <label className="block font-bold mb-2" htmlFor="businessName">
-                What is your business name or content creator name?
+                What is your business name, product name, or content creator
+                name?
               </label>
               <input
                 className="input input-bordered input-primary w-full max-w-s"
@@ -114,7 +115,8 @@ const GetStarted: React.FC = () => {
                 className="block font-bold mb-2"
                 htmlFor="businessDescription"
               >
-                Please provide a brief description of your business or content.
+                Please provide a brief description of your business, product, or
+                content.
               </label>
               <div className="pb-2">
                 <p className="opacity-50 underline">Examples</p>
