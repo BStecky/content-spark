@@ -44,7 +44,7 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
     try {
       const actionCodeSettings = {
-        url: "http://localhost:3000/dashboard",
+        url: "https://contentspark.io/dashboard",
         handleCodeInApp: true,
       };
 
