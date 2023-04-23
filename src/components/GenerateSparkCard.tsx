@@ -99,7 +99,6 @@ const GenerateSparkCard: React.FC<GenerateSparkCardProps> = ({
       setSparkingIdea(true);
       const response = await generateContent(options);
       if (response && response.length > 0) {
-        console.log("Generated text: ", response);
         setEditedContent(response);
         // setShowModal(true);
         setEditing(true);

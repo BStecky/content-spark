@@ -38,10 +38,6 @@ export interface GeneratedContent {
 export const generateContent = async (
   options: GenerateContentOptions
 ): Promise<string | undefined> => {
-  console.log("Message:", options.message);
-  console.log("Context:", options.context);
-  console.log("Options:", options);
-
   const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [

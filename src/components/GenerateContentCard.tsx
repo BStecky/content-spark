@@ -136,9 +136,6 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
       setLoading(true);
       const response = await generateContent(options);
       if (response && response.length > 0) {
-        console.log("Generated text: ", response);
-        console.log("Platform: ", selectedPlatform);
-        console.log("Content type: ", contentType);
         setGeneratedText(response);
         setEditedContent(response);
         setShowModal(true);

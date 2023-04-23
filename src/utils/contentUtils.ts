@@ -101,7 +101,6 @@ export const createBasicPrompt = (
       prompt += `\n ${contentType} context: ${about}. `;
   }
 
-  // console.log("Completed prompt: ", prompt);
   return prompt;
 };
 
@@ -125,7 +124,6 @@ export const createBasicSparkPrompt = (
   Reference the following keywords: ${keywords}. 
   The target audience is ${targetAudience}`;
 
-  // console.log("Completed prompt: ", prompt);
   return prompt;
 };
 
