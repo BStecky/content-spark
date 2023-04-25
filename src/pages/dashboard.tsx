@@ -14,6 +14,7 @@ import GenerateContentCard from "@/components/GenerateContentCard";
 import GeneratedTweetsCard from "@/components/GeneratedTweetsCard";
 import GenerateSparkCard from "@/components/GenerateSparkCard";
 import GeneratedIdeasCard from "@/components/GeneratedIdeasCard";
+import DashboardSidebar from "@/components/DashboardSidebar";
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -34,14 +35,14 @@ const DashboardPage: React.FC = () => {
   }, [loadingProfile, hasProfile, router]);
   return (
     <PrivateRoute>
-      <div className="min-h-screen">
-        <Navbar />
-        <div className="container mx-auto">
-          <h1 className="text-3xl text-primary font-bold text-center p-2">
-            Dashboard
-          </h1>
-          {user ? (
-            // <main className="grid w-full grid-cols-1 lg:grid-cols-2 justify-center">
+      {user ? (
+        <div className="min-h-screen">
+          <Navbar />
+          <div className="container mx-auto flex flex-row">
+            <DashboardSidebar
+              user={user}
+              userProfile={userProfile}
+            ></DashboardSidebar>
             <main className="">
               <section className="grid lg:grid-cols-2 lg:w-full">
                 <div className="py-4 px-2">
@@ -107,11 +108,11 @@ const DashboardPage: React.FC = () => {
                 })()}
               </section>
             </main>
-          ) : (
-            <p>Loading...</p>
-          )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <p>Loading...</p>
+      )}
     </PrivateRoute>
   );
 };
