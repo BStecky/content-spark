@@ -186,15 +186,13 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
   };
 
   return (
-    <div className="w-[100%] h-full card bg-base-200 mx-auto p-10 shadow-xl">
-      <div className="card-body">
-        <h2 className="text-2xl card-title font-bold text-center">
-          Generate Content
-        </h2>
+    <div className="">
+      <div className="">
         <form onSubmit={handleSubmit} className="w-full max-w-lg mx-auto">
-          <label htmlFor="platform" className="text-md">
-            Platform:
-          </label>
+          <h2 className="text-2xl card-title font-bold text-center">
+            Generate Content
+          </h2>
+          <h3 className="text-md text-center">Platform:</h3>
           <div className="flex flex-wrap justify-evenly p-4 max-w-lg mx-auto">
             {/* Add more platforms to this array when I'm ready. */}
             {["Twitter"].map((platform) => (
@@ -217,9 +215,7 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
             ))}
           </div>
 
-          <label htmlFor="tone" className="text-md">
-            Choose a tone:
-          </label>
+          <h3 className="text-md text-center">Choose a tone:</h3>
           <div className="grid grid-cols-2 gap-2 justify-evenly p-4 max-w-lg mx-auto">
             {[
               "Professional",
@@ -247,9 +243,7 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
             ))}
           </div>
 
-          <label htmlFor="content-type" className="text-md">
-            Content Type:
-          </label>
+          <h3 className="text-md text-center">Content Type:</h3>
           <div className="grid grid-cols-2 gap-2 p-4 max-w-lg mx-auto">
             {renderContentTypeOptions(selectedPlatform)}
           </div>

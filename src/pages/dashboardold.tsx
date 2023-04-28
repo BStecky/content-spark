@@ -60,6 +60,52 @@ const DashboardPage: React.FC = () => {
                   })()}
                 </div>
               </section>
+              <section className="w-full col-span-2 px-2 flex flex-col mt-2">
+                <div className="tabs tabs-boxed mx-auto">
+                  <a
+                    className={`tab ${
+                      activeTab === "spark" ? "tab-active" : ""
+                    }`}
+                    onClick={() => handleTabClick("spark")}
+                  >
+                    Spark ✨
+                  </a>
+                  <a
+                    className={`tab ${
+                      activeTab === "generateContent" ? "tab-active" : ""
+                    } `}
+                    onClick={() => handleTabClick("generateContent")}
+                  >
+                    Generate 💻
+                  </a>
+                </div>
+                {(() => {
+                  switch (activeTab) {
+                    case "generateContent":
+                      return (
+                        user &&
+                        userProfile && (
+                          <GenerateContentCard
+                            user={user}
+                            userProfile={userProfile}
+                          />
+                        )
+                      );
+                    case "spark":
+                      return (
+                        user &&
+                        userProfile && (
+                          <GenerateSparkCard
+                            user={user}
+                            userProfile={userProfile}
+                          />
+                        )
+                      );
+                    default:
+                      return null;
+                  }
+                })()}
+              </section>
             </main>
           </div>
         </div>
