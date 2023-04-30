@@ -41,7 +41,7 @@ const DashboardPage: React.FC = () => {
             user={user}
             userProfile={userProfile}
           ></DashboardSidebar>
-          <div className="container mx-auto flex flex-row p-10 max-h-screen overflow-scroll">
+          <div className="ml-16 md:ml-48 lg:ml-64 mx-auto flex flex-row p-10 max-h-screen">
             <main className="">
               <section className="grid lg:grid-cols-2 lg:w-full">
                 <div className="py-4 px-2">

@@ -12,17 +12,11 @@ import {
 import { CustomUserProfile, firestore } from "./firebase"; // Import your firebase configuration file here
 import { UserProfile } from "firebase/auth";
 
-interface Tweet {
+interface Content {
   id: string;
-  content: string;
   userId: string;
-  createdAt: Date;
-}
-
-interface Idea {
-  id: string;
+  contentType: string;
   content: string;
-  userId: string;
   createdAt: Date;
 }
 
@@ -129,9 +123,9 @@ export const createBasicSparkPrompt = (
 
 // TODO: Potentially abstract the tweet related functions to "twitterUtils.ts"
 // and the LinkedIn related functions to "linkedInUtils.ts" etc. etc.
-export const getTweets = async (userId: string): Promise<Tweet[]> => {
+export const getTweets = async (userId: string): Promise<Content[]> => {
   try {
-    const tweets: Tweet[] = [];
+    const tweets: Content[] = [];
     const querySnapshot = await getDocs(
       query(
         collection(firestore, "twitterTweets"),
@@ -144,8 +138,9 @@ export const getTweets = async (userId: string): Promise<Tweet[]> => {
       const data = doc.data();
       tweets.push({
         id: doc.id,
-        content: data.content,
         userId: data.userId,
+        content: data.content,
+        contentType: "twitterTweet",
         createdAt: data.createdAt.toDate(),
       });
     });
@@ -166,9 +161,9 @@ export const deleteTweet = async (tweetId: string): Promise<void> => {
   }
 };
 
-export const getIdeas = async (userId: string): Promise<Idea[]> => {
+export const getIdeas = async (userId: string): Promise<Content[]> => {
   try {
-    const ideas: Idea[] = [];
+    const ideas: Content[] = [];
     const querySnapshot = await getDocs(
       query(
         collection(firestore, "contentIdeas"),
@@ -180,8 +175,9 @@ export const getIdeas = async (userId: string): Promise<Idea[]> => {
       const data = doc.data();
       ideas.push({
         id: doc.id,
-        content: data.content,
         userId: data.userId,
+        content: data.content,
+        contentType: "contentIdeas",
         createdAt: data.createdAt.toDate(),
       });
     });
@@ -190,6 +186,46 @@ export const getIdeas = async (userId: string): Promise<Idea[]> => {
     console.error("Error fetching ideas:", error);
     return []; // Return an empty array in case of errors
   }
+};
+
+export const getAllContent = async (userId: string): Promise<Content[]> => {
+  const contentTypes = [
+    // "linkedInPost",
+    // "linkedInComment",
+    // "linkedInReply",
+    "twitterTweet",
+    "twitterThread",
+    // "twitterComment",
+    "twitterReply",
+    "contentIdeas",
+  ];
+
+  const allContent: Content[] = [];
+  for (const contentType of contentTypes) {
+    const contentCollection = getCollectionForContentType(contentType);
+    if (!contentCollection) {
+      console.error("Invalid content type:", contentType);
+      continue;
+    }
+    const contentQuery = query(
+      collection(firestore, contentCollection),
+      where("userId", "==", userId),
+      orderBy("createdAt", "desc")
+    );
+    const contentSnapshot = await getDocs(contentQuery);
+    console.log(
+      `Fetched ${contentSnapshot.size} ${contentType} for user ${userId}`
+    );
+
+    const contentArray: Content[] = contentSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      contentType,
+      ...doc.data(),
+    })) as Content[];
+    allContent.push(...contentArray);
+  }
+
+  return allContent;
 };
 
 export const deleteIdea = async (ideaId: string): Promise<void> => {

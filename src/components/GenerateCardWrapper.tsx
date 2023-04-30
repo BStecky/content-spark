@@ -22,7 +22,7 @@ const GenerateCardWrapper: React.FC<GenerateCardWrapperProps> = ({
   };
 
   return (
-    <div className="w-[100%] md:w-[70%] h-full card bg-base-200 p-10 shadow-xl mb-10">
+    <div className="w-[100%] lg:w-[70%] h-[80%] lg:min-h-[100%] card bg-base-200 p-10 shadow-xl mb-10 lg:overflow-auto">
       <div className="tabs tabs-boxed mx-auto">
         <a
           className={`tab ${activeTab === "spark" ? "tab-active" : ""}`}

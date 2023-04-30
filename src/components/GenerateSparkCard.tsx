@@ -41,7 +41,6 @@ const GenerateSparkCard: React.FC<GenerateSparkCardProps> = ({
     "Innovation",
     "Leadership",
     "Solopreneur",
-    "Networking",
     "Work-life balance",
     "Sustainability",
   ];
@@ -111,18 +110,20 @@ const GenerateSparkCard: React.FC<GenerateSparkCardProps> = ({
     <div className="">
       <div className="">
         <form onSubmit={handleSubmit} className="w-full max-w-lg mx-auto">
-          <h2 className="text-2xl card-title font-bold text-center">
+          <h2 className="text-2xl card-title font-bold text-center min-w-[460px]">
             Spark Ideas
           </h2>
           <h3 className="text-center">Pick a type of content.</h3>
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 justify-evenly p-4 max-w-lg mx-auto">
+          <div className="grid grid-cols-3 gap-2 justify-evenly p-4 max-w-lg mx-auto">
             {contentTypes.map((type) => (
               <div
                 key={type}
-                className="form-control h-12 justify-center hover:outline outline-2 outline-primary bg-base-100 rounded-lg"
+                className="form-control h-12 justify-center hover:outline outline-2 outline-primary bg-base-100 rounded-lg "
               >
                 <label className="label cursor-pointer">
-                  <span className="label-text px-2">{type}</span>
+                  <span className="label-text px-2 text-xs lg:text-sm">
+                    {type}
+                  </span>
                   <input
                     type="radio"
                     name="radio-9"
@@ -136,14 +137,16 @@ const GenerateSparkCard: React.FC<GenerateSparkCardProps> = ({
             ))}
           </div>
           <h3 className="text-center">Pick a theme.</h3>
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 justify-evenly p-4 max-w-lg mx-auto">
+          <div className="grid grid-cols-3 gap-2 justify-evenly p-4 max-w-lg mx-auto">
             {themes.map((theme) => (
               <div
                 key={theme}
                 className="form-control h-12 justify-center hover:outline outline-2 outline-primary bg-base-100 rounded-lg"
               >
                 <label className="label cursor-pointer">
-                  <span className="label-text px-2">{theme}</span>
+                  <span className="label-text px-2 text-xs lg:text-sm">
+                    {theme}
+                  </span>
                   <input
                     type="radio"
                     name="radio-10"
@@ -157,14 +160,16 @@ const GenerateSparkCard: React.FC<GenerateSparkCardProps> = ({
             ))}
           </div>
           <h3 className="text-center">Select some key words.</h3>
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 justify-evenly p-4 max-w-lg mx-auto">
+          <div className="grid grid-cols-3 gap-2 justify-evenly p-4 max-w-lg mx-auto">
             {keywords.map((keyword) => (
               <div
                 key={keyword}
                 className="form-control h-12 justify-center hover:outline outline-2 outline-primary bg-base-100 rounded-lg"
               >
                 <label className="label cursor-pointer">
-                  <span className="label-text px-2">{keyword}</span>
+                  <span className="label-text px-2 text-xs lg:text-sm">
+                    {keyword}
+                  </span>
                   <input
                     className="checkbox checkbox-primary"
                     type="checkbox"

@@ -40,22 +40,22 @@ const GeneratePage: React.FC = () => {
       {user && userProfile ? (
         <div className="min-h-screen flex bg-base-300">
           <DashboardSidebar user={user} userProfile={userProfile} />
-          <div className="container mx-auto flex flex-row p-10 md:max-h-screen">
-            <main className="w-full px-2 flex flex-col md:flex-row mt-2 gap-4">
+          <div className="w-full flex flex-row p-2 lg:p-10 lg:max-h-screen ml-16 md:ml-48 lg:ml-64">
+            <main className="w-full px-2 flex flex-col lg:flex-row mt-2 lg:gap-4">
               <GenerateCardWrapper
                 user={user}
                 userProfile={userProfile}
                 onGeneratedContent={setGeneratedContent}
               />
-              <div className="w-[100%] md:w-[50%]">
-                <div className="w-[100%] h-full card bg-base-200 mx-auto p-10 shadow-xl mb-10">
+              <div className="w-[100%] lg:w-[50%] h-[40%] lg:h-[100%]">
+                <div className="w-[100%] h-full lg:h-full card bg-base-200 mx-auto p-6 shadow-xl lg:p-10 lg:mb-10">
                   <textarea
-                    className="textarea h-full bg-base-100"
+                    className="textarea bg-base-100 h-full"
                     value={generatedContent}
                     onChange={(e) => setGeneratedContent(e.target.value)}
                     placeholder="Your content will display here."
                   ></textarea>
-                  <div className="flex justify-center p-2">
+                  <div className="flex justify-center pt-2">
                     <button
                       className={`btn btn-error mx-2 ${
                         noGeneratedContent ? "btn-disabled" : ""
