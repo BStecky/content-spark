@@ -23,8 +23,7 @@ const HomePage: React.FC = () => {
           Welcome to ContentSpark.io ✨
         </h1>
         <h2 className="py-6">
-          Im not supposed to focus on the landing page so why dont you just
-          check the app out?
+          For when you need a little help with your content creation process.
         </h2>
         <Link href="/login">
           <button className="btn btn-primary">Get Started</button>

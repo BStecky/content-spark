@@ -24,7 +24,6 @@ const LoginForm: React.FC = () => {
       await signInWithEmailAndPassword(auth, email, password);
       setError("");
       console.log("successfully signed in");
-      router.push("/dashboard");
     } catch (err: any) {
       setError(err.message);
     }
@@ -61,7 +60,7 @@ const LoginForm: React.FC = () => {
     <main>
       {" "}
       <Navbar></Navbar>
-      <section className="max-w-md bg-base-200 mx-auto p-10 rounded-lg mt-10 shadow-xl">
+      <section className="max-w-md bg-base-200 mx-auto p-10 rounded-lg mt-10 shadow-md border border-black">
         <form onSubmit={handleEmailLogin} className="w-full max-w-sm mx-auto">
           <h2 className="text-center text-2xl font-bold mb-4">Login</h2>
           {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -103,7 +102,7 @@ const LoginForm: React.FC = () => {
             </button>
           </div>
         </form>
-        <button onClick={handleGoogleLogin} className="btn btn-accent my-2">
+        <button onClick={handleGoogleLogin} className="btn btn-secondary my-2">
           Sign in with Google
         </button>
       </section>

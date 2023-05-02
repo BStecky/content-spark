@@ -14,6 +14,10 @@ import GenerateContentCard from "@/components/GenerateContentCard";
 import GeneratedTweetsCard from "@/components/GeneratedTweetsCard";
 import GenerateSparkCard from "@/components/GenerateSparkCard";
 import GeneratedIdeasCard from "@/components/GeneratedIdeasCard";
+import DashboardSidebar from "@/components/DashboardSidebar";
+import UserPlanCard from "@/components/UserPlanCard";
+import SuggestedContentCard from "@/components/SuggestedContentCard";
+import Link from "next/link";
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -34,20 +38,32 @@ const DashboardPage: React.FC = () => {
   }, [loadingProfile, hasProfile, router]);
   return (
     <PrivateRoute>
-      <div className="min-h-screen">
-        <Navbar />
-        <div className="container mx-auto">
-          <h1 className="text-3xl text-primary font-bold text-center p-2">
-            Dashboard
-          </h1>
-          {user ? (
-            // <main className="grid w-full grid-cols-1 lg:grid-cols-2 justify-center">
-            <main className="">
-              <section className="grid lg:grid-cols-2 lg:w-full">
-                <div className="py-4 px-2">
+      {user && userProfile ? (
+        <div className="flex bg-base-300 min-h-screen overflow-auto">
+          <DashboardSidebar
+            user={user}
+            userProfile={userProfile}
+          ></DashboardSidebar>
+          <div className="ml-16 md:ml-48 lg:ml-64 mx-auto flex flex-row p-4 max-h-screen w-full">
+            <main className="w-full">
+              <div className="navbar bg-base-200 text-primary-content rounded-lg shadow-md border border-black">
+                <a className="p-2 font-bold normal-case text-xl">
+                  <span className="text-primary">
+                    {userProfile?.businessName}
+                  </span>
+                </a>
+              </div>
+              <section className="flex flex-wrap lg:w-full gap-4">
+                <div className="py-4 mx-auto">
                   <UserCard />
                 </div>
-                <div className="py-4 px-2">
+                <div className="py-4 mx-auto">
+                  <UserPlanCard userProfile={userProfile} />
+                </div>
+                <div className="py-4 mx-auto">
+                  <SuggestedContentCard />
+                </div>
+                {/* <div className="py-4 mx-auto">
                   {(() => {
                     switch (activeTab) {
                       case "generateContent":
@@ -58,60 +74,32 @@ const DashboardPage: React.FC = () => {
                         return null;
                     }
                   })()}
+                </div> */}
+                <div className="py-4 mx-auto">
+                  <div className="gap-4 w-96 h-full card bg-base-200 justify-center border border-black shadow-md">
+                    <div className="flex flex-col p-8 items-center text-center">
+                      <Link href="/generate" className="w-full">
+                        <div className="btn btn-primary m-4 w-[80%]">
+                          Create Content
+                        </div>
+                      </Link>
+                      <Link href="/viewContent" className="w-full">
+                        <div className="btn btn-primary w-[80%]">
+                          View Content
+                        </div>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-              </section>
-              <section className="w-full col-span-2 px-2 flex flex-col mt-2">
-                <div className="tabs tabs-boxed mx-auto">
-                  <a
-                    className={`tab ${
-                      activeTab === "spark" ? "tab-active" : ""
-                    }`}
-                    onClick={() => handleTabClick("spark")}
-                  >
-                    Spark ✨
-                  </a>
-                  <a
-                    className={`tab ${
-                      activeTab === "generateContent" ? "tab-active" : ""
-                    } `}
-                    onClick={() => handleTabClick("generateContent")}
-                  >
-                    Generate 💻
-                  </a>
-                </div>
-                {(() => {
-                  switch (activeTab) {
-                    case "generateContent":
-                      return (
-                        user &&
-                        userProfile && (
-                          <GenerateContentCard
-                            user={user}
-                            userProfile={userProfile}
-                          />
-                        )
-                      );
-                    case "spark":
-                      return (
-                        user &&
-                        userProfile && (
-                          <GenerateSparkCard
-                            user={user}
-                            userProfile={userProfile}
-                          />
-                        )
-                      );
-                    default:
-                      return null;
-                  }
-                })()}
               </section>
             </main>
-          ) : (
-            <p>Loading...</p>
-          )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex justify-center items-center h-full">
+          <button className="btn btn-ghost loading">Loading...</button>
+        </div>
+      )}
     </PrivateRoute>
   );
 };

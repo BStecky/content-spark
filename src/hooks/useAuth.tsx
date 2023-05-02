@@ -9,9 +9,11 @@ import {
   signInWithEmailLink,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
+import { useUserProfile } from "@/hooks/userProfileContext";
 
 interface AuthContextValue {
   user: User | null;
+  userProfile: any | null;
   signOut: () => Promise<void>;
   loading: boolean;
 }
@@ -22,7 +24,12 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
 
   if (!context) {
-    return { user: null, signOut: async () => {}, loading: false };
+    return {
+      user: null,
+      userProfile: null,
+      signOut: async () => {},
+      loading: false,
+    };
   }
 
   return context;
@@ -36,13 +43,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { userProfile, loading: userProfileLoading } = useUserProfile(
+    user?.uid
+  );
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
       if (user) {
-        router.push("/dashboard");
+        if (!userProfile && !userProfileLoading) {
+          router.push("/getStarted");
+        } else {
+          router.push("/dashboard");
+        }
       }
     });
 
@@ -78,7 +92,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, signOut, loading }}>
+    <AuthContext.Provider value={{ user, userProfile, signOut, loading }}>
       {children}
     </AuthContext.Provider>
   );

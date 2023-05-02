@@ -5,6 +5,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { firestore } from "../utils/firebase";
 import PrivateRoute from "@/components/auth/PrivateRoute";
 import Navbar from "@/components/Navbar";
+import DashboardSidebar from "@/components/DashboardSidebar";
 
 const Profile: React.FC = () => {
   const { user } = useAuth();
@@ -25,10 +26,26 @@ const Profile: React.FC = () => {
 
   return (
     <PrivateRoute>
-      <Navbar></Navbar>
-      <div className="flex items-center justify-center mt-10 h-screen">
-        Profile editing coming soon.
-        {/* <form
+      <main>
+        {user ? (
+          <section>
+            <DashboardSidebar user={user} userProfile={null} />
+            <div className="flex items-center justify-center h-screen ml-16 md:ml-48 lg:ml-64">
+              Profile editing coming soon.
+            </div>{" "}
+          </section>
+        ) : (
+          <div> sorry</div>
+        )}
+      </main>
+    </PrivateRoute>
+  );
+};
+
+export default Profile;
+
+{
+  /* <form
           onSubmit={handleSubmit}
           className="card glass p-6 space-y-6 w-full max-w-xl"
         >
@@ -87,10 +104,5 @@ const Profile: React.FC = () => {
           <button type="submit" className="btn btn-primary">
             Save Profile
           </button>
-        </form> */}
-      </div>
-    </PrivateRoute>
-  );
-};
-
-export default Profile;
+        </form> */
+}

@@ -57,7 +57,7 @@ const GeneratedTweetsCard: React.FC = () => {
   };
 
   return (
-    <div className="card bg-base-200 w-[100%] shadow-xl">
+    <div className="card bg-base-200 w-[100%] shadow-md border border-black">
       <div className="card-body">
         <h2 className="card-title">
           Generated Tweets for {userProfile?.businessName}
