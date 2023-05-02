@@ -39,7 +39,7 @@ const DashboardPage: React.FC = () => {
   return (
     <PrivateRoute>
       {user && userProfile ? (
-        <div className="min-h-screen flex bg-base-300">
+        <div className="flex bg-base-300 min-h-screen overflow-auto">
           <DashboardSidebar
             user={user}
             userProfile={userProfile}
