@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useAuth } from "@/hooks/useAuth";
-import { useUserProfile } from "@/hooks/userProfileContext";
-import { useEffect, useState } from "react";
+import { useUserProfile } from "@//hooks/userProfileContext";
+import { useEffect } from "react";
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -17,19 +17,25 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
     user?.uid
   );
   const router = useRouter();
-  const [routePerformed, setRoutePerformed] = useState(false);
 
   useEffect(() => {
-    if (!routePerformed) {
-      if (!loading && !user) {
+    if (!loading && !userProfileLoading) {
+      if (!user) {
         router.push("/login");
-        setRoutePerformed(true);
-      } else if (!loading && user && !userProfile && !userProfileLoading) {
-        router.push("/getStarted");
-        setRoutePerformed(true);
+      } else if (user && !userProfile) {
+        if (router.asPath !== "/getStarted") {
+          router.push("/getStarted");
+          if (typeof window !== "undefined") {
+            alert("Please complete your profile before continuing.");
+          }
+        }
+      } else if (user && userProfile) {
+        if (router.asPath === "/getStarted") {
+          router.push("/dashboard");
+        }
       }
     }
-  }, [user, loading, router, userProfile, userProfileLoading, routePerformed]);
+  }, [user, loading, router, userProfile, userProfileLoading]);
 
   return <>{!loading && user && <div>{children}</div>}</>;
 };

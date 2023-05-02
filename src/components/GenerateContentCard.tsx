@@ -10,6 +10,7 @@ import { CustomUserProfile } from "@/utils/firebase";
 interface GenerateContentCardProps {
   user: User | null;
   userProfile: CustomUserProfile;
+  onGeneratedContent: (content: string) => void;
 }
 
 type PlatformContentOptions = {
@@ -36,6 +37,7 @@ type PlatformContentSelectedOptions = {
 const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
   user,
   userProfile,
+  onGeneratedContent,
 }) => {
   const [selectedTone, setSelectedTone] = useState("Professional");
   const [selectedPlatform, setSelectedPlatform] = useState("Twitter");
@@ -136,9 +138,9 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
       setLoading(true);
       const response = await generateContent(options);
       if (response && response.length > 0) {
-        setGeneratedText(response);
-        setEditedContent(response);
-        setShowModal(true);
+        onGeneratedContent(response);
+        // setEditedContent(response);
+        // setShowModal(true);
         setLoading(false);
       } else {
         console.log("No content was generated.");

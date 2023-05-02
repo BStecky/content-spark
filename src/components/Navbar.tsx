@@ -3,11 +3,15 @@ import Link from "next/link";
 import { useAuth } from "../hooks/useAuth";
 import { signOut as firebaseSignOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
+import { useRouter } from "next/router";
 
 const Navbar: React.FC = () => {
   const { user, signOut } = useAuth();
+  const router = useRouter();
+
   const handleSignOut = async () => {
     try {
+      router.push("/");
       await signOut();
     } catch (error) {
       console.error("Error signing out:", error);

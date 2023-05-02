@@ -57,7 +57,7 @@ const GeneratedIdeasCard: React.FC = () => {
   };
 
   return (
-    <div className="card bg-base-200 w-[100%] shadow-xl">
+    <div className="card bg-base-200 shadow-md border border-black w-[90%] h-[500px] mx-auto">
       <div className="card-body">
         <h2 className="card-title">
           Generated Ideas for {userProfile?.businessName}
@@ -77,13 +77,13 @@ const GeneratedIdeasCard: React.FC = () => {
               {generatedIdeas.map((idea, index) => (
                 <div
                   key={idea.id}
-                  className={`text-center card w-full bg-base-100 max-h-60 overflow-scroll ${
+                  className={`text-center card w-full h-full bg-base-100 max-h-60 overflow-scroll ${
                     index === currentIdeaIndex ? "" : "hidden"
                   }`}
                 >
                   <div className="card-body">
                     <p>{idea.content}</p>
-                    <div className="flex flex-row">
+                    <div className="flex flex-row p-6">
                       <button
                         className="btn btn-primary btn-sm m-2"
                         onClick={async () => {

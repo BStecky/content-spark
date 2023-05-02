@@ -70,13 +70,13 @@ const GetStarted: React.FC = () => {
   };
 
   return (
-    <main className="min-h-screen lg:min-h-screen">
+    <main className="min-h-screen lg:min-h-screen pb-10">
       <PrivateRoute>
         <Navbar></Navbar>
-        <section className="max-w-lg bg-base-200 mx-auto p-10 rounded-lg mt-10 shadow-xl">
+        <section className="w-[70%] bg-base-200 mx-auto p-10 rounded-lg mt-10 shadow-md border border-black">
           <h2 className="text-center text-2xl font-bold mb-4">Get Started</h2>
           {error && <p className="text-red-500 mb-4">{error}</p>}
-          <form onSubmit={handleSubmit} className="w-full max-w-sm mx-auto">
+          <form onSubmit={handleSubmit} className="w-[50%] mx-auto">
             <div className="mb-4">
               <label className="block font-bold mb-2" htmlFor="userType">
                 Are you a small business owner, content creator, or solo
@@ -116,7 +116,7 @@ const GetStarted: React.FC = () => {
                 htmlFor="businessDescription"
               >
                 Please provide a brief description of your business, product, or
-                content.
+                content. 2-3 sentences or more.
               </label>
               <div className="pb-2">
                 <p className="opacity-50 underline">Examples</p>
@@ -129,7 +129,7 @@ const GetStarted: React.FC = () => {
                 </ul>
               </div>
               <textarea
-                className="input input-bordered input-primary w-full max-w-s h-24"
+                className="input input-bordered input-primary p-4 w-full max-w-s h-36"
                 id="businessDescription"
                 value={businessDescription}
                 onChange={(e) => setBusinessDescription(e.target.value)}

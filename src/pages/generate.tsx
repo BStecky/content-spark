@@ -40,7 +40,7 @@ const GeneratePage: React.FC = () => {
       {user && userProfile ? (
         <div className="min-h-screen flex bg-base-300">
           <DashboardSidebar user={user} userProfile={userProfile} />
-          <div className="w-full flex flex-row p-2 lg:p-10 lg:max-h-screen ml-16 md:ml-48 lg:ml-64">
+          <div className="w-full flex flex-row p-2 lg:py-6 lg:max-h-screen ml-16 md:ml-48 lg:ml-64">
             <main className="w-full px-2 flex flex-col lg:flex-row mt-2 lg:gap-4">
               <GenerateCardWrapper
                 user={user}
@@ -48,7 +48,7 @@ const GeneratePage: React.FC = () => {
                 onGeneratedContent={setGeneratedContent}
               />
               <div className="w-[100%] lg:w-[50%] h-[40%] lg:h-[100%]">
-                <div className="w-[100%] h-full lg:h-full card bg-base-200 mx-auto p-6 shadow-xl lg:p-10 lg:mb-10">
+                <div className="w-[100%] h-full lg:h-full card bg-base-200 mx-auto p-6 shadow-md lg:p-10 lg:mb-10 border border-black">
                   <textarea
                     className="textarea bg-base-100 h-full"
                     value={generatedContent}
@@ -83,7 +83,9 @@ const GeneratePage: React.FC = () => {
           </div>
         </div>
       ) : (
-        <p>Loading...</p>
+        <div className="flex justify-center items-center">
+          <button className="btn btn-square loading">Loading...</button>
+        </div>
       )}
     </PrivateRoute>
   );

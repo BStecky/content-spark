@@ -45,14 +45,18 @@ const ContentView: React.FC = () => {
           <DashboardSidebar user={user} userProfile={userProfile} />
           <div className="w-full ml-16 md:ml-48 lg:ml-64">
             {isLoading ? (
-              <div>Loading...</div>
+              <div className="flex justify-center items-center h-full">
+                <button className="btn btn-ghost loading">Loading...</button>
+              </div>
             ) : (
               <MasonryGrid content={content} />
             )}
           </div>
         </div>
       ) : (
-        <p>Loading...</p>
+        <div className="flex justify-center items-center h-full">
+          <button className="btn btn-ghost loading">Loading...</button>
+        </div>
       )}
     </PrivateRoute>
   );

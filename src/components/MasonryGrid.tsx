@@ -17,9 +17,9 @@ interface MasonryGridProps {
 const MasonryGrid: React.FC<MasonryGridProps> = ({ content }) => {
   const breakpointColumnsObj = {
     default: 4,
-    1100: 3,
-    700: 2,
-    500: 1,
+    1500: 3,
+    1100: 2,
+    600: 1,
   };
 
   return (

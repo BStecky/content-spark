@@ -236,3 +236,21 @@ export const deleteIdea = async (ideaId: string): Promise<void> => {
     console.error("Error deleting idea:", error);
   }
 };
+
+export const deleteContent = async (
+  contentId: string,
+  contentType: string
+): Promise<void> => {
+  try {
+    const contentCollection = getCollectionForContentType(contentType);
+    if (!contentCollection) {
+      console.error("Invalid content type:", contentType);
+      return;
+    }
+
+    await deleteDoc(doc(firestore, contentCollection, contentId));
+    console.log(`${contentType} deleted successfully.`);
+  } catch (error) {
+    console.error(`Error deleting ${contentType}:`, error);
+  }
+};
