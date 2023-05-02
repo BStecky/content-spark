@@ -213,10 +213,6 @@ export const getAllContent = async (userId: string): Promise<Content[]> => {
       orderBy("createdAt", "desc")
     );
     const contentSnapshot = await getDocs(contentQuery);
-    console.log(
-      `Fetched ${contentSnapshot.size} ${contentType} for user ${userId}`
-    );
-
     const contentArray: Content[] = contentSnapshot.docs.map((doc) => ({
       id: doc.id,
       contentType,
