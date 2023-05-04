@@ -10,12 +10,30 @@ const HomePage: React.FC = () => {
   return (
     <main className="h-screen text-center">
       <Head>
-        <title>ContentSpark</title>
+        <title>ContentSpark | AI-Powered Social Media Content Generation</title>
         <meta
           name="description"
-          content="ContentSpark simplifies the content creation process using AI to generate tailored content ideas for your social media platforms."
+          content="ContentSpark.io revolutionizes the content creation process with AI-powered content generation for social media platforms. Get tailored content ideas, Twitter threads, Facebook posts, and more!"
         />
-        <meta name="keywords" content="content generation, social media, AI" />
+        <meta
+          name="keywords"
+          content="content generation, social media, AI, content ideas, Twitter threads, Facebook posts, OpenAI API"
+        />
+        <meta
+          property="og:title"
+          content="ContentSpark | AI-Powered Social Media Content Generation"
+        />
+        <meta
+          property="og:description"
+          content="Revolutionize your content creation process with AI-powered content generation for social media platforms. Get tailored content ideas, Twitter threads, Facebook posts, and more!"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.contentspark.io/" />
+        {/* <meta
+          property="og:image"
+          content="https://www.contentspark.io/og-image.jpg"
+        /> */}
+        <link rel="canonical" href="https://www.contentspark.io/" />
       </Head>
       <Navbar />
       <section className="max-w-md mx-auto">
