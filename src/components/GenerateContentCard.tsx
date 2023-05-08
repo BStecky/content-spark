@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useUserProfile } from "@/hooks/userProfileContext";
 import { User, UserProfile } from "firebase/auth";
-import { generateContent } from "../api/openai";
+import { generateContent, generateGPT4Content } from "../pages/api/openai";
 import GeneratedContentModal from "./GeneratedContentModal";
 import { createBasicPrompt, saveGeneratedContent } from "@/utils/contentUtils";
 import { checkAndUpdateApiUsage } from "@/utils/planUtils";
@@ -136,7 +136,7 @@ const GenerateContentCard: React.FC<GenerateContentCardProps> = ({
         return;
       }
       setLoading(true);
-      const response = await generateContent(options);
+      const response = await generateGPT4Content(options);
       if (response && response.length > 0) {
         onGeneratedContent(response);
         // setEditedContent(response);

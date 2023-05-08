@@ -11,7 +11,10 @@ import {
   PencilSquareIcon,
   UserCircleIcon,
   ArrowLeftOnRectangleIcon,
+  BoltIcon,
+  AcademicCapIcon,
 } from "@heroicons/react/24/solid";
+import Image from "next/image";
 
 const DashboardSidebar: React.FC<{
   user: User;
@@ -56,6 +59,19 @@ const DashboardSidebar: React.FC<{
                     {" "}
                     <ChartBarIcon className="h-6 w-6" />
                     <span className="hidden md:block">Dashboard</span>
+                  </li>
+                </Link>
+              </div>
+              <div className="lg:w-[90%]">
+                <Link href="/contentWizard">
+                  <li
+                    className={`cursor-pointer flex gap-2 w-full p-2 hover:border hover:border-black hover:shadow-md rounded-md ease-in-out duration-100 ${isActive(
+                      "/contentWizard"
+                    )}`}
+                  >
+                    {" "}
+                    <AcademicCapIcon className="h-6 w-6 items-center" />
+                    <span className="hidden md:block">Content Wizard</span>
                   </li>
                 </Link>
               </div>

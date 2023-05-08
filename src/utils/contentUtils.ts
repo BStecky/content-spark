@@ -79,12 +79,21 @@ export const createBasicPrompt = (
   const businessName = userProfile.businessName;
   const targetType = userProfile.targetAudience;
   const tone = selectedTone.toLowerCase();
+
+  const format =
+    contentType === "Thread"
+      ? "Tweet 1: [tweet1]\nTweet 2: [tweet2]\n..."
+      : "Tweet: [response]";
+
   let prompt = `
-  Instruction: Please generate an engaging ${selectedPlatform} ${contentType} do not use hashtags.
+  Instruction: Please generate an engaging ${selectedPlatform} ${contentType}.
   About me: I am a ${userProfile.userType}. 
   Info about me or my business: ${userProfile.businessDescription}, ${businessName}. 
   Post Tone: ${tone} 
-  Target audience: ${targetType}.`;
+  Target audience: ${targetType}.
+  Do not include any hashtags.
+  Please provide the content in the following format: ${format}`;
+
   switch (contentType) {
     case "Thread":
       prompt += `\n Thread length: ${threadLength} tweets. `;
@@ -112,11 +121,15 @@ export const createBasicSparkPrompt = (
   if ((contentType = "anything")) {
     contentType = "random social media content";
   }
+
+  const format = "Idea 1: [idea1]\nIdea 2: [idea2]\nIdea 3: [idea3]";
+
   let prompt = `Generate three ${contentType} ideas for a ${userType}, their business name is ${businessName} and 
   the description is ${businessDescription}.
   The content theme should be ${theme}.
   Reference the following keywords: ${keywords}. 
-  The target audience is ${targetAudience}`;
+  The target audience is ${targetAudience}.
+  Please provide the ideas in the following format: ${format}`;
 
   return prompt;
 };
