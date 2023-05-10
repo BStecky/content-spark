@@ -5,6 +5,11 @@ import { useUserProfile } from "@/hooks/userProfileContext";
 import PrivateRoute from "@/components/auth/PrivateRoute";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import { saveGeneratedContent } from "@/utils/contentUtils";
+import { createTweetSuggestionPrompt } from "@/utils/contentUtils";
+import { CustomUserProfile } from "@/utils/firebase";
+import { checkAndUpdateApiUsage } from "@/utils/planUtils";
+import { generateGPT4Content } from "./api/openai";
+import ContentWizardTweetsCard from "@/components/ContentWizardTweetsCard";
 
 const ContentWizard: React.FC = () => {
   const { user } = useAuth();
@@ -18,6 +23,8 @@ const ContentWizard: React.FC = () => {
   const [keywords, setKeywords] = useState([]);
   const [tone, setTone] = useState("");
   const [contentType, setContentType] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [suggestedTweets, setSuggestedTweets] = useState<string[]>([]);
 
   const handleSave = () => {
     const contentCategory = "contentIdeas";
@@ -28,6 +35,54 @@ const ContentWizard: React.FC = () => {
     setGeneratedContent("");
   };
 
+  const getTweetSuggestions: () => Promise<void> = async () => {
+    // Prepare the OpenAI API parameters
+    const prompt = createTweetSuggestionPrompt(
+      userProfile,
+      contentType,
+      topic,
+      tone,
+      keywords
+    );
+    const options = {
+      message: prompt,
+      context:
+        "You are a professional content creator assistant here to help anyone grow their business or brand. You give out unique and innovative content ideas for all types of content.",
+      maxTokens: 300,
+      n: 1,
+      temperature: 0.7,
+    };
+    if (userProfile) {
+      try {
+        if ((await checkAndUpdateApiUsage(userProfile, 1)) == false) {
+          console.log("Not enough API usage left.");
+          return;
+        }
+        const response = await generateGPT4Content(options);
+        if (response && response.length > 0) {
+          console.log("your tweets", response);
+          setGeneratedContent(response);
+          const tweets = response
+            .split("\n")
+            .map((line) => line.split(": ")[1]);
+          setSuggestedTweets(
+            tweets.filter((tweet) => tweet && tweet.trim() !== "")
+          );
+          setLoading(false);
+        } else {
+          console.log("No content was generated.");
+        }
+      } catch (error: unknown) {
+        console.error("Error generating content:", error);
+      }
+    }
+  };
+
+  const handleRemoveTweet = (index: number) => {
+    setSuggestedTweets((prevTweets) =>
+      prevTweets.filter((_tweet, i) => i !== index)
+    );
+  };
   const handleDelete = () => {
     setGeneratedContent("");
   };
@@ -40,7 +95,7 @@ const ContentWizard: React.FC = () => {
     setProgress(progress - 1);
   };
 
-  const renderContentStep = () => {
+  const renderContentStep = (userProfile: CustomUserProfile) => {
     switch (contentType) {
       case "tweet":
         return renderTweetStep();
@@ -197,20 +252,33 @@ const ContentWizard: React.FC = () => {
               <button className="btn btn-primary" onClick={moveBackward}>
                 Back
               </button>
-              <button className="btn btn-primary" onClick={moveForward}>
+              <button className="btn btn-primary" onClick={getTweetSuggestions}>
                 Get my tweets
               </button>
+              <button onClick={moveForward}>Next</button>
             </div>
           </div>
         );
       case 3:
         return (
-          <div>
-            {/* Display generated tweets here */}
-            <button onClick={handleSave}>Save</button>
-            <button onClick={handleDelete}>Delete</button>
+          <section className="">
+            <h1 className="font-bold text-3xl text-center p-2">
+              Your Tweet Suggestions!
+            </h1>
+            <div className="flex flex-wrap justify-center">
+              {userProfile &&
+                suggestedTweets.map((tweet, index) => (
+                  <ContentWizardTweetsCard
+                    key={index}
+                    user={user}
+                    userProfile={userProfile}
+                    tweet={tweet}
+                    onRemove={() => handleRemoveTweet(index)}
+                  />
+                ))}
+            </div>
             <button onClick={moveBackward}>Back</button>
-          </div>
+          </section>
         );
       default:
         return <div>Something went wrong!</div>;
@@ -220,11 +288,15 @@ const ContentWizard: React.FC = () => {
   return (
     <PrivateRoute>
       {user && userProfile ? (
-        <div className="min-h-screen flex bg-base-300">
+        <div className="min-h-screen flex bg-base-300 overflow-auto">
           <DashboardSidebar user={user} userProfile={userProfile} />
           <div className="w-full flex flex-row p-2 lg:py-6 lg:max-h-screen ml-16 md:ml-48 lg:ml-64">
-            <main className="w-full px-2 flex flex-col lg:flex-row mt-2 lg:gap-4 justify-center items-center">
-              {renderContentStep()}
+            <main
+              className={`w-full px-2 flex flex-col lg:flex-row mt-2 lg:gap-4 justify-center ${
+                progress !== 3 ? "items-center" : ""
+              }`}
+            >
+              {renderContentStep(userProfile)}
             </main>
           </div>
         </div>
@@ -238,3 +310,6 @@ const ContentWizard: React.FC = () => {
 };
 
 export default ContentWizard;
+function setLoading(arg0: boolean) {
+  throw new Error("Function not implemented.");
+}

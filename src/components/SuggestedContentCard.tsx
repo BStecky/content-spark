@@ -49,7 +49,7 @@ const SuggestedContentCard: React.FC<{
             ))}
           </ul>
         ) : (
-          <p className="text-lg">Fetching trending topics...</p>
+          <p className="text-lg">Keyword suggestions coming soon... </p>
         )}
       </div>
     </div>

@@ -134,6 +134,39 @@ export const createBasicSparkPrompt = (
   return prompt;
 };
 
+export const createTweetSuggestionPrompt = (
+  userProfile: CustomUserProfile | null,
+  contentType: string,
+  tweetContext: string | null,
+  tone: string,
+  keywords: string[]
+): string => {
+  const targetAudience = userProfile?.targetAudience;
+  const businessName = userProfile?.businessName;
+  const businessDescription = userProfile?.businessDescription;
+  const userType = userProfile?.userType;
+
+  if ((contentType = "anything")) {
+    contentType = "random social media content";
+  }
+
+  const format = "1: [tweet1]\n2: [tweet2]\n3: [tweet3]";
+
+  let prompt = `Come up with three unique and innovative tweet ideas for a ${userType}, their business name is ${businessName} and 
+  the description is ${businessDescription}.
+  The tone of the tweets should be ${tone}.
+  Reference the following keywords: ${keywords}. 
+  The target audience is ${targetAudience}.
+  ${
+    tweetContext
+      ? `This is what the tweets should be about: ${tweetContext}.`
+      : ""
+  }
+  Please provide the ideas in the following format: ${format}`;
+
+  return prompt;
+};
+
 // TODO: Potentially abstract the tweet related functions to "twitterUtils.ts"
 // and the LinkedIn related functions to "linkedInUtils.ts" etc. etc.
 export const getTweets = async (userId: string): Promise<Content[]> => {
