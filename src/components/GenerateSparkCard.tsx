@@ -90,7 +90,6 @@ const GenerateSparkCard: React.FC<GenerateSparkCardProps> = ({
         console.log("Not enough API usage left.");
         return;
       }
-      console.log("sparking idea...");
       setSparkingIdea(true);
       const response = await generateGPT4Content(options);
       if (response && response.length > 0) {

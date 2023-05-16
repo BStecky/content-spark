@@ -152,15 +152,50 @@ export const createTweetSuggestionPrompt = (
 
   const format = "1: [tweet1]\n2: [tweet2]\n3: [tweet3]";
 
-  let prompt = `Come up with three unique and innovative tweet ideas for a ${userType}, their business name is ${businessName} and 
-  the description is ${businessDescription}.
-  The tone of the tweets should be ${tone}.
-  Reference the following keywords: ${keywords}. 
-  The target audience is ${targetAudience}.
+  let prompt = `Come up with three unique and relatable tweet ideas for a ${userType}, their name or business name is ${businessName}.
+  The background context for this creator is: ${businessDescription}.
+  IMPORTANT: Do not explicitly mention the context information in the tweets unless it is absolutely relevant to the tweet idea. Instead, use it as a context for generating ideas.
+  The tone of the tweets should be: ${tone}.
+  The target audience is: ${targetAudience}.
+  The tweets must be relatable, not overly promotional, and written in a way that feels genuine and human-like. Avoid using a lot of hashtags and overly upbeat language that may come across as "cringe" or unrelatable.
   ${
     tweetContext
-      ? `This is what the tweets should be about: ${tweetContext}.`
-      : ""
+      ? `The tweets should be about this: ${tweetContext}.`
+      : `Reference the following keywords to come up with tweet ideas: ${keywords.join(
+          ", "
+        )}.`
+  }
+
+  Please provide the ideas in the following format: ${format}`;
+
+  return prompt;
+};
+
+export const createPostSuggestionPrompt = (
+  userProfile: CustomUserProfile | null,
+  contentType: string,
+  postContext: string | null,
+  tone: string,
+  keywords: string[]
+): string => {
+  const targetAudience = userProfile?.targetAudience;
+  const businessName = userProfile?.businessName;
+  const businessDescription = userProfile?.businessDescription;
+  const userType = userProfile?.userType;
+  const format = "1: [post1]\n2: [post2]\n3: [post3]";
+
+  let prompt = `Come up with three unique and relatable social media post ideas for a ${userType}, the posts should be a paragraph or two at least, their name or business name is ${businessName}.
+  The background context for this creator is: ${businessDescription}.
+  IMPORTANT: Do not explicitly mention the the background information in the posts unless it is absolutely relevant to the tweet idea. Instead, use it as a context for generating ideas.
+  The tone of the posts should be: ${tone}.
+  The target audience is: ${targetAudience}.
+  The posts must be relatable, not overly promotional, and written in a way that feels genuine and human-like. Avoid using a lot of hashtags and overly upbeat language that may come across as "cringe" or unrelatable. 
+  ${
+    postContext
+      ? `The post should be about this: ${postContext}.`
+      : `Reference the following keywords to come up with post ideas: ${keywords.join(
+          ", "
+        )}.`
   }
   Please provide the ideas in the following format: ${format}`;
 

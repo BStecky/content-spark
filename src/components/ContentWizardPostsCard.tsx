@@ -2,24 +2,25 @@ import React, { useState } from "react";
 import { saveGeneratedContent } from "@/utils/contentUtils";
 import { User } from "firebase/auth";
 import { CustomUserProfile } from "@/utils/firebase";
+import { SparklesIcon } from "@heroicons/react/24/solid";
 
-interface ContentWizardTweetsCardProps {
+interface ContentWizardPostsCardProps {
   user: User | null;
   userProfile: CustomUserProfile;
-  tweet: string;
+  post: string;
   onRemove: () => void;
 }
 
-const ContentWizardTweetsCard: React.FC<ContentWizardTweetsCardProps> = ({
-  tweet,
+const ContentWizardPostsCard: React.FC<ContentWizardPostsCardProps> = ({
+  post,
   user,
   onRemove,
 }) => {
-  const [editedTweet, setEditedTweet] = useState(tweet);
+  const [editedPost, setEditedPost] = useState(post);
   const handleSave = () => {
-    let contentCategory = "twitterTweet";
+    let contentCategory = "contentIdeas";
     if (user) {
-      saveGeneratedContent(user?.uid, editedTweet, contentCategory);
+      saveGeneratedContent(user?.uid, editedPost, contentCategory);
     }
     alert("Your content has been saved!");
   };
@@ -30,21 +31,17 @@ const ContentWizardTweetsCard: React.FC<ContentWizardTweetsCardProps> = ({
   };
 
   return (
-    <div className="bg-base-100 card rounded-lg shadow-md m-2 border border-black w-96">
+    <div className="bg-base-100 card rounded-lg shadow-md m-2 border border-black w-[450px]">
       <div className="card-body">
         <div className="card-title">
-          <img
-            src="/images/twitter.png"
-            alt="Twitter Icon"
-            className="w-8 h-8 rounded-md"
-          />
-          <span>Tweet</span>
+          <SparklesIcon className="h-8 w-8 items-center" />
+          <span>Post</span>
         </div>
         <textarea
           className="textarea textarea-bordered w-full mb-4"
-          value={tweet}
-          onChange={(e) => setEditedTweet(e.target.value)}
-          style={{ height: "200px" }}
+          value={post}
+          onChange={(e) => setEditedPost(e.target.value)}
+          style={{ height: "300px" }}
         />
         <div className="card-actions">
           <button className="btn btn-sm btn-primary" onClick={handleSave}>
@@ -59,4 +56,4 @@ const ContentWizardTweetsCard: React.FC<ContentWizardTweetsCardProps> = ({
   );
 };
 
-export default ContentWizardTweetsCard;
+export default ContentWizardPostsCard;

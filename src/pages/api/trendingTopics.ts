@@ -8,8 +8,6 @@ export default async function handler(
   const { businessDescription } = req.query;
 
   try {
-    console.log("businessDescription: ", businessDescription);
-
     // Set a promise to resolve in the specified time
     const timeout = (ms: number) => {
       return new Promise((resolve) => setTimeout(resolve, ms));
