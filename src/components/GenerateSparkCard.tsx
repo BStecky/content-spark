@@ -2,7 +2,7 @@ import { createBasicSparkPrompt } from "@/utils/contentUtils";
 import { User, UserProfile } from "firebase/auth";
 import React from "react";
 import { useState } from "react";
-import { generateContent } from "@/api/openai";
+import { generateContent, generateGPT4Content } from "@/pages/api/openai";
 
 import {
   checkAndUpdateApiUsage,
@@ -90,9 +90,8 @@ const GenerateSparkCard: React.FC<GenerateSparkCardProps> = ({
         console.log("Not enough API usage left.");
         return;
       }
-      console.log("sparking idea...");
       setSparkingIdea(true);
-      const response = await generateContent(options);
+      const response = await generateGPT4Content(options);
       if (response && response.length > 0) {
         onGeneratedContent(response);
         // setShowModal(true);
