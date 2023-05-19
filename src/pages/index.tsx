@@ -36,7 +36,7 @@ const HomePage: React.FC = () => {
         <link rel="canonical" href="https://www.contentspark.io/" />
       </Head>
       <Navbar />
-      <section className="max-w-md mx-auto">
+      {/* <section className="max-w-md mx-auto">
         <h1 className="text-5xl font-bold text-center pt-10">
           Welcome to ContentSpark.io ✨
         </h1>
@@ -46,7 +46,28 @@ const HomePage: React.FC = () => {
         <Link href="/login">
           <button className="btn btn-primary">Get Started</button>
         </Link>
-      </section>
+      </section> */}
+      <div
+        className="hero min-h-screen"
+        style={{
+          backgroundImage: `url("/images/contentsparkbg.png")`,
+        }}
+      >
+        <div className="hero-overlay bg-opacity-60"></div>
+        <div className="hero-content text-center">
+          <div className="max-w-md">
+            <h1 className="mb-5 text-5xl font-bold text-base-100">
+              Spark ideas and generate content for your socials
+            </h1>
+            <p className="mb-5 text-base-100">
+              Content Spark is here, for when you need a little help.
+            </p>
+            <Link href="/login">
+              <button className="btn btn-primary">Get Started</button>
+            </Link>{" "}
+          </div>
+        </div>
+      </div>
     </main>
   );
 };
